@@ -33,7 +33,7 @@ module.exports = (app, passport) => {
     app.use(logger(log));
 
     // view engine 설정
-    app.set('views', path.join(__dirname, 'views'));
+    app.set('views', path.join(__dirname, 'app/views'));
     app.set('view engine', 'pug');
 
     // passport 초기화
