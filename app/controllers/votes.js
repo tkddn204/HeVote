@@ -6,6 +6,7 @@ const voterApi = require('../ethereum/api/voter.api');
 const Account = require('../models/account');
 const hec = require('../hec/hec');
 const ipfs = require('../ipfs/ipfs');
+const config = require('../../config');
 const mkdirSync = require('../utils/fs.util').mkdirSync;
 
 module.exports = {
@@ -35,7 +36,7 @@ module.exports = {
                 }
                 const total = electionDetail.candidateList.length;
                 await hec.encryptCandidateList(electionAddress, voterAddress,
-                    total, 'data', (out, err) => {
+                    total, `${config.root}/data`, (out, err) => {
                         if (err) console.error(err);
                         console.log(out);
 
@@ -63,7 +64,7 @@ module.exports = {
                             }
 
                             // 파일 저장
-                            mkdirSync(path.resolve(`./data/candidate/${electionAddress}`));
+                            mkdirSync(`${config.root}/data/candidate/${electionAddress}`);
                             fs.writeFileSync(candidateListPath, candidateList.toString());
 
                             return res.render('election/vote', {

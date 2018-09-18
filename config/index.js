@@ -6,7 +6,7 @@ let db;
 if(env.MONGO_ID) {
     db = `mongodb://${env.MONGO_ID}:${env.MONGO_PASS}@${env.MONGO_URL}:${env.MONGO_PORT}/vote`;
 } else {
-    db = `mongodb://${env.MONGO_URL}:${env.MONGO_PORT}/vote`;
+    db = `mongodb://${env.MONGO_URL}/${env.MONGO_PORT}/vote`;
 }
 
 const defaults = {

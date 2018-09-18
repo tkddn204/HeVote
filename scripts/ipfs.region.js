@@ -2,11 +2,12 @@ const ipfs = require('../app/ipfs/ipfs');
 const fs = require('fs');
 const Election = require('../app/ethereum/election');
 const contractInformation = require('../config/contract-address.json');
+const config = require('../config');
 
 const contractAddress = contractInformation['test_region_contract'];
 const ownerAddress = contractInformation['test_region_address'];
 
-const publicKeyFilePath = "./data/publicKey/" + contractAddress + ".bin";
+const publicKeyFilePath = `${config.root}/data/publicKey/${contractAddress}.bin`;
 const publicKeyFile = fs.readFileSync(publicKeyFilePath);
 let buffer = new Buffer.from(publicKeyFile);
 
