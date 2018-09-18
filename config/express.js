@@ -9,7 +9,7 @@ const compression = require('compression');
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const winston = require('winston');
-const mongoStore = require('connect-mongo');
+const mongoStore = require('connect-mongo')(session);
 
 const config = require('./');
 
