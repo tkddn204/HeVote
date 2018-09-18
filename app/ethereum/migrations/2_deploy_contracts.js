@@ -3,6 +3,7 @@ const timeUtil = require('../../utils/time.util');
 const ElectionFactory = artifacts.require('./ElectionFactory.sol');
 const Election = artifacts.require('./Election.sol');
 const hec = require('../../hec/hec.js');
+const config = require('../../../config');
 
 module.exports = (deployer, network, accounts) =>
     deployer.then(async () => {
@@ -38,14 +39,14 @@ module.exports = (deployer, network, accounts) =>
         }
 
         // 파일에 저장
-        await fs.open('../contract-address.json', 'w', (err, fd) => {
+        await fs.open(`${config.root}/config/contract-address.json`, 'w', (err, fd) => {
             if (err) throw 'error opening file: ' + err;
             const jsonObj = {
                 factory: deployedElectionFactory.address,
                 test_region_contract: deployedPublicElections[0],
                 test_region_address: accounts[1]
             };
-            fs.writeFile('../contract-address.json',
+            fs.writeFile(`${config.root}/config/contract-address.json`,
                 new Buffer.from(JSON.stringify(jsonObj)), 'utf8', (err) => {
                     if (err) throw 'error writing file: ' + err;
                     fs.close(fd, () => console.log(JSON.stringify(jsonObj)));
