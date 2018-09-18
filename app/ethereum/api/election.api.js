@@ -86,11 +86,11 @@ exports.vote = async (electionAddress, voterAddress, candidateHash) => {
  */
 
 exports.getElectionSummaryList = async (opts) => {
-    if(opts.isFinite) {
+    if(opts.isFinite !== undefined) {
         const isFiniteElection = opts.isFinite;
         const electionAddressList = await Factory.methods.getDeployedElections(isFiniteElection).call();
         const electionSummaryList = await electionAddressList.map(
-            async (electionAddress) => await getElectionSummary(electionAddress));
+            async (electionAddress) => await this.getElectionSummary(electionAddress));
         return await Promise.all(electionSummaryList);
     }
     // TODO: myInfo에 연결할 리스트

@@ -6,7 +6,7 @@ const contractAddress = require('../config/contract-address.json');
 
 mongoose.connect(config.db, err => {
     if(err) console.error(err.message);
-    console.log("mongoDB connected.")
+    else console.log("mongoDB connected.")
 });
 
 // DB 변경

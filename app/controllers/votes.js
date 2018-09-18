@@ -115,7 +115,7 @@ module.exports = {
                         // DB 업데이트
                         Account.findOneAndUpdate({username: req.user.username}, {
                             $push: {votingVotes: electionAddress}
-                        }, {upsert: true}, (err, data) => {
+                        }, {upsert: true}, (err) => {
                             if (err) res.send(err.toString());
                             else res.redirect(req.path.substring(0, req.path.length - 5));
                         });

@@ -1,6 +1,8 @@
+
 const path = require('path');
 
-require('dotenv').config();
+const root = path.join(__dirname, '..');
+require('dotenv').config({path: `${root}/.env`});
 const env = process.env;
 
 let db;
@@ -11,7 +13,7 @@ if(env.MONGO_ID) {
 }
 
 const defaults = {
-    root: path.join(__dirname, '..'),
+    root: root,
     db: db
 };
 

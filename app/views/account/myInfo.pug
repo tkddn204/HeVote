@@ -1,5 +1,5 @@
 extends ../base/layout
-include ../vote/voteListItem
+include ../election/electionListItem
 
 block content
     .container
@@ -23,7 +23,7 @@ block content
                     +voteItem(val, val[5] ? 'private' : 'public')
 
         a.btn.btn-primary.btn-lg(style='margin: 30px')(
-        href="/voterequest"
+        href="/election/request"
         role="button"
         aria-pressed="true"
         ) 투표신청

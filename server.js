@@ -13,7 +13,8 @@ const config = require('./config');
 const app = express();
 
 // set port
-app.set('port', normalizePort(process.env.PORT || '4000'));
+const port = normalizePort(process.env.PORT || '4000');
+app.set('port', port);
 
 // Bootstrap 설정
 require('./config/passport')(passport);
@@ -23,7 +24,7 @@ require('./config/routes')(app, passport);
 /**
  * HTTP server를 만듭니다.
  */
-const server = http.createServer(server);
+const server = http.createServer(app);
 
 // MongoDB에 접속 후 서버 열기
 mongoose.connect(config.db);

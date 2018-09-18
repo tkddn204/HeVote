@@ -32,8 +32,10 @@ exports.create = async (req, res, next) => {
     });
 };
 
-exports.login = (req, res) =>
+exports.login = (req, res) => {
+    if (req.user) res.redirect('/');
     res.render('account/login', {error: req.flash('error')});
+};
 
 exports.signIn = (req, res, next) =>
     req.session.save((err) => {
@@ -43,7 +45,7 @@ exports.signIn = (req, res, next) =>
 
 exports.logout = (req, res, next) => {
     req.logout();
-    req.session.save((err) => {
+    req.session.destroy((err) => {
         if (err) return next(err);
         res.redirect('/');
     });
