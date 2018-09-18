@@ -4,7 +4,10 @@ const Account = require('../app/models/account');
 const config = require('../config/index');
 const contractAddress = require('../config/contract-address.json');
 
-mongoose.connect(config.db).connection.on('error', (err) => console.error(err.message));
+mongoose.connect(config.db, err => {
+    if(err) console.error(err.message);
+    console.log("mongoDB connected.")
+});
 
 // DB 변경
 Account.findOne({
@@ -19,8 +22,3 @@ Account.findOne({
         process.exit();
     })
 });
-
-// mongo.disconnect((err) => {
-//     if(err) return console.log(err.message);
-//     console.info("접속종료")
-// });
