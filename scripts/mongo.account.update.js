@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const Account = require('../app/models/account');
-const config = require('../config/index');
+const config = require('../config');
 const contractAddress = require('../config/contract-address.json');
 
 mongoose.connect(config.db, err => {

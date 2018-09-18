@@ -1,5 +1,6 @@
 const path = require('path');
 
+require('dotenv').config();
 const env = process.env;
 
 let db;
