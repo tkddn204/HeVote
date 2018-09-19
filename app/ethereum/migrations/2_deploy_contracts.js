@@ -23,12 +23,12 @@ module.exports = (deployer, network, accounts) =>
 
         // 지방선거 투표에 후보자 추가
         const deployedRegionElection = await Election.at(deployedPublicElections[0]);
-        const regionCandidateList = ['허태정', '박성효', '남충희', '김윤기'];
+        const regionCandidateList = ['홍길동', '김영희', '박철수', '고길동'];
         const regionCandidateCommitment = [
-            'http://policy.nec.go.kr/skin/doc.html?fn=20180602153429870_1.pdf&rs=/preview/html/201806/',
-            'http://policy.nec.go.kr/skin/doc.html?fn=20180601163602545_1.pdf&rs=/preview/html/201806/',
-            'http://policy.nec.go.kr/skin/doc.html?fn=20180603213658679_1.pdf&rs=/preview/html/201806/',
-            'http://policy.nec.go.kr/skin/doc.html?fn=20180601163653030_1.pdf&rs=/preview/html/201806/'
+            '시민을 위해 노력하겠습니다!',
+            '올바른 정치를 하겠습니다!',
+            '밝은 사회를 위해 전진하겠습니다!',
+            '경제 발전을 위해 행동하겠습니다!'
         ];
         for (let i = 0; i < regionCandidateList.length; i++) {
             await deployedRegionElection.addCandidate(

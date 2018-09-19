@@ -66,13 +66,10 @@ block content
                     .text-center
                         -electionInPath = path + '/vote'
                         -electionButtonDisabled = electionDetail.summary.electionState !== "진행 중"
-                        a.btn.btn-primary.btn-lg.active(
-                            id="voteBtn"
-                            href=electionInPath
-                            role="button"
-                            aria-pressed="true"
+                            //href=electionInPath
+                        button.btn.btn-primary.btn-lg.active(
                             disabled=electionButtonDisabled
-                            data-loading-text='잠시만 기다려주세요...'
+                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin' /> 잠시만 기다려주세요..."
                         ) 투표참여
                 else
                     .text-center
@@ -132,4 +129,4 @@ block content
                                     format: 'yyyy-m-dd HH:MM'
                                 });
                         button.btn.btn-default(type='submit') 정보 변경
-            script(src="javascripts/election.detail.js")
+    script(src="javascripts/election.detail.js")

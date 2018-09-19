@@ -23,7 +23,7 @@ $(document).ready(() => {
             })
         });
 
-    $("form").on("submit", function (event) {
+    $("form").on("submit", (event) => {
         event.preventDefault();
 
         const url = $(this).attr("action");
@@ -34,8 +34,11 @@ $(document).ready(() => {
         }
 
         // 로딩 상태로 변경
-        $(".btn").button('loading');
+        const $btn = $(".btn");
+        $btn.button('loading');
 
-        $.post(url, data);
+        $.post(url, data).done(() => {
+            $btn.button('reset')
+        });
     });
 });

@@ -37,5 +37,7 @@ block content
                                                     button.btn.btn-secondary(type='button', data-dismiss='modal') 닫기
                         -val = val+1
                 .text-center
-                    button.btn.btn-danger(type='submit' data-loading-text='투표 중입니다...') 투표하기
-            script(src='/javascripts/vote.js')
+                    button.btn.btn-danger(
+                    type='submit'
+                    data-loading-text="<i class='fa fa-circle-o-notch fa-spin' /> 잠시만 기다려주세요...") 투표하기
+    script(src='/javascripts/vote.js')

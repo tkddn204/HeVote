@@ -35,6 +35,9 @@ module.exports = (app, passport) => {
     app.set('views', `${config.root}/app/views`);
     app.set('view engine', 'pug');
 
+    // public 설정
+    app.use('/public', express.static(path.join(config.root, 'public')));
+
     // bodyParser 설정
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
@@ -70,8 +73,6 @@ module.exports = (app, passport) => {
     //     res.locals.csrfToken = req.csrfToken();
     //     next();
     // });
-
-    app.use(express.static(path.join(config.root, 'public')));
 
     app.use((req, res, next) => {
         if(req.isAuthenticated()) {
