@@ -36,6 +36,9 @@ block content
                     each candidate in electionDetail.candidateList
                         .card(style='width: 15rem;')
                             .card-body
+                                if(electionDetail.tallyResult)
+                                    -percentage = electionDetail.tallyResult[val-1]/electionDetail.ballotCount
+                                    p.card-text 득표수 : #{electionDetail.tallyResult[val-1]}표(#{percentage}%)
                                 h5.card-title
                                     b #{val}
                                     | #{": " + candidate.name}
@@ -57,7 +60,6 @@ block content
                                                     | #{candidate.commitment}
                                                 .modal-footer
                                                     button.btn.btn-secondary(type='button', data-dismiss='modal') 닫기
-
                         -val += 1
             if(user && !electionDetail.owner)
                 if(electionDetail.voterState !== "Voted")

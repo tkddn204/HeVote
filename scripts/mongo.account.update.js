@@ -15,7 +15,10 @@ Account.findOne({
 }, (err, account) => {
     if (err) return console.log(err.message);
     account.etherAccount = contractAddress['test_region_address'];
-    account.deployedVotes = [contractAddress['test_region_contract']];
+    account.deployElections = [{
+        address: contractAddress['test_region_contract'],
+        finite: false
+    }];
     account.save((err) => {
         if (err) return console.log(err.message);
         console.info("지방선거 완료");

@@ -113,8 +113,9 @@ module.exports = {
                         fs.writeFileSync(candidateListPath, "");
 
                         // DB 업데이트
+                        const finiteElection = await electionApi.isFiniteElection(electionAddress);
                         Account.findOneAndUpdate({username: req.user.username}, {
-                            $push: {votingVotes: electionAddress}
+                            $push: {votingElections: {address: electionAddress, isFinite: finiteElection}}
                         }, {upsert: true}, (err) => {
                             if (err) res.send(err.toString());
                             else res.redirect(req.path.substring(0, req.path.length - 5));

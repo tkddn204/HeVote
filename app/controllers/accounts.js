@@ -58,14 +58,18 @@ exports.myInfo = async (req, res) => {
     }
     let votingElectionsSummaryList;
     let deployedElectionsSummaryList;
-    if (req.user.votingVotes.length) {
-        votingElectionsSummaryList = await electionApi.getElectionSummaryList(req.user.votingVotes);
+    if (req.user.votingElections.length) {
+        votingElectionsSummaryList = await electionApi.getElectionSummaryList({
+            electionList: req.user.votingElections
+        });
     }
-    if (req.user.deployedVotes.length) {
-        deployedElectionsSummaryList = await electionApi.getElectionSummaryList(req.user.deployedVotes);
+    if (req.user.deployElections.length) {
+        deployedElectionsSummaryList = await electionApi.getElectionSummaryList({
+            electionList: req.user.deployedElections
+        });
     }
     res.render('account/myInfo', {
-        votingVotes: votingElectionsSummaryList,
-        deployedVotes: deployedElectionsSummaryList
+        votingElections: votingElectionsSummaryList,
+        deployedElections: deployedElectionsSummaryList
     });
 };

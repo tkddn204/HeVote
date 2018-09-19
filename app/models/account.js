@@ -6,8 +6,8 @@ const Account = new Schema({
     username: String,
     password: String,
     etherAccount: String,
-    votingVotes: [{address: String, isFinite: Boolean}],
-    deployedVotes: [String]
+    votingElections: [{address: String, isFinite: Boolean}],
+    deployedElections: [{address: String, isFinite: Boolean}]
 });
 
 Account.plugin(passportLocalMongoose);

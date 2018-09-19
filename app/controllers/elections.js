@@ -63,7 +63,9 @@ exports.detail = async (req, res) => {
         if (electionDetail.summary['electionState'] === "종료") {
             const result = await electionApi.getTallyResult(electionAddress);
             if (result) {
+                // 결과 String을 배열로 만듦
                 const resultArray = result.split(',').map((val) => parseInt(val));
+                electionDetail.tallyResult = resultArray;
 
                 const max = Math.max.apply(null, resultArray);
                 electionDetail.resultName = [];

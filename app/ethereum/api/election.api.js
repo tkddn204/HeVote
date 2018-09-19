@@ -86,12 +86,23 @@ exports.vote = async (electionAddress, voterAddress, candidateHash) => {
  */
 
 exports.getElectionSummaryList = async (opts) => {
+    let electionAddressList;
+    let electionSummaryList;
+
     if(opts.isFinite !== undefined) {
+        // 보통 목록을 불러올 때
         const isFiniteElection = opts.isFinite;
-        const electionAddressList = await Factory.methods.getDeployedElections(isFiniteElection).call();
-        const electionSummaryList = await electionAddressList.map(
-            async (electionAddress) => await this.getElectionSummary(electionAddress));
-        return await Promise.all(electionSummaryList);
+        electionAddressList = await Factory.methods.getDeployedElections(isFiniteElection).call();
+    } else if (opts.electionList !== undefined){
+        // TODO: 공개선거와 유권자 한정 선거 나누기
+        // MongoDB에서 선거 목록을 불러올 때
+        electionAddressList = opts.electionList.map(election => election.address);
+    } else {
+        return undefined;
     }
-    // TODO: myInfo에 연결할 리스트
+
+    electionSummaryList = await electionAddressList.map(
+        async (electionAddress) => await this.getElectionSummary(electionAddress));
+
+    return await Promise.all(electionSummaryList);
 };
