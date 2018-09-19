@@ -7,7 +7,7 @@ block content
         else
             h1.display-4 #{electionDetail.summary.electionName}
             if (electionDetail.summary.finiteElection)
-                small (인원이 한정된 투표)
+                small (한정투표)
             h5.my-1
                 case electionDetail.summary.electionState
                     when "대기": b.text-muted 대기
@@ -67,10 +67,12 @@ block content
                         -electionInPath = path + '/vote'
                         -electionButtonDisabled = electionDetail.summary.electionState !== "진행 중"
                         a.btn.btn-primary.btn-lg.active(
+                            id="voteBtn"
                             href=electionInPath
                             role="button"
                             aria-pressed="true"
                             disabled=electionButtonDisabled
+                            data-loading-text='잠시만 기다려주세요...'
                         ) 투표참여
                 else
                     .text-center
@@ -79,7 +81,7 @@ block content
                         aria-pressed="true"
                         disabled
                         ) 이미 투표에 참여하셨습니다!
-            if(electionDetail.owner)
+            if(electionDetail.owner && electionDetail.resultName !== undefined)
                 button.btn.btn-default(
                     data-target='#modifyForm'
                     data-toggle='collapse'
@@ -130,3 +132,4 @@ block content
                                     format: 'yyyy-m-dd HH:MM'
                                 });
                         button.btn.btn-default(type='submit') 정보 변경
+            script(src="javascripts/election.detail.js")
