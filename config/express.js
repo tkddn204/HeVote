@@ -36,7 +36,7 @@ module.exports = (app, passport) => {
     app.set('view engine', 'pug');
 
     // public 설정
-    app.use('/public', express.static(path.join(config.root, 'public')));
+    app.use(express.static(path.join(config.root, 'public')));
 
     // bodyParser 설정
     app.use(bodyParser.json());

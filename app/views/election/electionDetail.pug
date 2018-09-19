@@ -46,7 +46,7 @@ block content
                                     -onClick = "window.open('" + candidate.commitment + "')"
                                     button.btn.btn-success(onclick=onClick) 공약보기
                                 else
-                                    button.btn.btn-primary(type='button', data-toggle='modal', data-target='#commitmentModal')
+                                    button.btn.btn-success(type='button', data-toggle='modal', data-target='#commitmentModal')
                                         | 공약보기
                                     // Modal
                                     #commitmentModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalCenterTitle', aria-hidden='true')
@@ -66,8 +66,8 @@ block content
                     .text-center
                         -electionInPath = path + '/vote'
                         -electionButtonDisabled = electionDetail.summary.electionState !== "진행 중"
-                            //href=electionInPath
-                        button.btn.btn-primary.btn-lg.active(
+                        button.btn.btn-primary.btn-lg(
+                            onclick=`window.location='${electionInPath}';`
                             disabled=electionButtonDisabled
                             data-loading-text="<i class='fa fa-circle-o-notch fa-spin' /> 잠시만 기다려주세요..."
                         ) 투표참여
@@ -129,4 +129,4 @@ block content
                                     format: 'yyyy-m-dd HH:MM'
                                 });
                         button.btn.btn-default(type='submit') 정보 변경
-    script(src="javascripts/election.detail.js")
+    script(src="/javascripts/election.detail.js")
