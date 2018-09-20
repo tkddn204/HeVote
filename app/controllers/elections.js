@@ -131,7 +131,7 @@ exports.changeState = async (req, res) => {
                             // 동형암호로 집계를 한다
                             const candidateListLength = await candidateApi.getCandidateLength(electionAddress);
                             await hec.tally(electionAddress, candidateListLength,
-                                "hec/data", async (out, err) => {
+                                "data", async (out, err) => {
                                     if (err) {
                                         return res.send(err);
                                     }
