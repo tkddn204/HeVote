@@ -1,6 +1,6 @@
 $(document).ready(() => {
 
-    $("button[class=btn-primary]").click(() => {
+    $("button[class=btn-primary]").click((event) => {
         const $this = $(event.target);
         const loadingText = "잠시만 기다려주세요...";
 

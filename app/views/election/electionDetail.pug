@@ -37,12 +37,14 @@ block content
                         each candidate in electionDetail.candidateList
                             .card(style='width: 15rem;')
                                 .card-body
-                                    if(electionDetail.tallyResult)
-                                        -percentage = electionDetail.tallyResult[val-1]/electionDetail.ballotCount
-                                        p.card-text 득표수 : #{electionDetail.tallyResult[val-1]}표(#{percentage}%)
                                     h5.card-title
                                         b #{val+1}
                                         | #{": " + candidate.name}
+                                    if(electionDetail.tallyResult)
+                                        -percentage = parseInt((electionDetail.tallyResult[val]/electionDetail.ballotCount)*100)
+                                        h5.card-text 득표수 :
+                                            b #{electionDetail.tallyResult[val]}표
+                                            | (#{percentage}%)
                                     if(candidate.commitment.includes("http"))
                                         -onClick = "window.open('" + candidate.commitment + "')"
                                         button.btn.btn-success(onclick=onClick) 공약보기

@@ -2,7 +2,7 @@ $(document).ready(() => {
 
     $(".btn[type=submit]").click((event) => {
         const $this = $(event.target);
-        const loadingText = "잠시만 기다려주세요...";
+        const loadingText = "투표 중입니다...";
 
         const candidate = $('input[name="candidate"]:checked').val();
         if (!candidate) {
