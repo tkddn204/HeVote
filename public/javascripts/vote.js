@@ -1,44 +1,28 @@
-let candidate;
-
 $(document).ready(() => {
 
-    // ref: https://codepen.io/JacobLett/pen/jzdYPz
-    $(".card")
-        .hover(
-            () => $(this).addClass('shadow').css('cursor', 'pointer'),
-            () => $(this).removeClass('shadow'))
-        .click(() => {
-            // border 추가 및 그림자 제거
-            $(this).addClass('border-primary');
-            $(this).removeClass('shadow');
+    $(".btn[type=submit]").click((event) => {
+        const $this = $(event.target);
+        const loadingText = "잠시만 기다려주세요...";
 
-            // candidate 저장
-            candidate = $(this).attr("value");
-
-            // 다른 카드의 border 제거
-            $(".card").each(() => {
-                if ($(this).attr("value") !== candidate) {
-                    $(this).removeClass('border-primary');
-                }
-            })
-        });
-
-    $("form").on("submit", (event) => {
-        event.preventDefault();
-
-        const url = $(this).attr("action");
-        const data = {candidate: candidate};
+        const candidate = $('input[name="candidate"]:checked').val();
         if (!candidate) {
             alert("후보를 선택해주세요!");
             return;
+        } else {
+            $("form").submit();
         }
-
-        // 로딩 상태로 변경
-        const $btn = $(".btn");
-        $btn.button('loading');
-
-        $.post(url, data).done(() => {
-            $btn.button('reset')
-        });
+        if ($this.html() !== loadingText) {
+            $this.html(loadingText);
+            $this.attr('disabled', true);
+        }
     });
+
+    $("button[id^='commitmentBtn']").click((event) => {
+        const index = parseInt(event.target.id.slice(-1));
+        const card = $('.card')[index];
+        const title = $(card).find('h5').text();
+        const content = $(card).find('p').text();
+        $('#modalTitle').text(title);
+        $('#modalContent').text(content);
+    })
 });

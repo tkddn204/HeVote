@@ -5,39 +5,29 @@ block content
         if(!user)
             p 로그인이 필요합니다!
         else
-            h1.display-4 #{electionDetail.summary.electionName}
+            h1.display-4 #{electionDetail.summary.electionName} 투표
             hr
             br
-            form(role='form', action=path, method="post")
-                .card-deck
-                    -val = 0
+            form.text-center(role='form', action=path, method="post")
+                // ref: https://bootsnipp.com/snippets/rl468
+                -val = 0
+                .btn-group.btn-group-toggle(data-toggle='buttons'): ul
                     each candidate in electionDetail.candidateList
-                        .card(style='width: 13rem;', value=candidateList[val])
-                            .card-body
-                                h5.card-title
-                                    b #{val}
+                        li.btn.btn-outline-danger(style='padding: 30px;margin: 15px;')
+                            input(
+                            type='radio',
+                            name='candidate',
+                            value=candidateList[val],
+                            autocomplete="off"
+                            )
+                            #body
+                                h3
+                                    b #{val + 1}
                                     | #{": " + candidate.name}
-                                if(candidate.commitment.includes("http"))
-                                    -onClick = "window.open('" + candidate.commitment + "')"
-                                    button.btn.btn-success(onclick=onClick) 공약보기
-                                else
-                                    button.btn.btn-primary(type='button', data-toggle='modal', data-target='#commitmentModal')
-                                        | 공약보기
-                                    // Modal
-                                    #commitmentModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalCenterTitle', aria-hidden='true')
-                                        .modal-dialog.modal-dialog-centered(role='document')
-                                            .modal-content
-                                                .modal-header
-                                                    h5#modalLongTitle.modal-title #{candidate.name}의 공약
-                                                    button.close(type='button', data-dismiss='modal', aria-label='Close')
-                                                        span(aria-hidden='true') ×
-                                                .modal-body
-                                                    | #{candidate.commitment}
-                                                .modal-footer
-                                                    button.btn.btn-secondary(type='button', data-dismiss='modal') 닫기
                         -val = val+1
                 .text-center
-                    button.btn.btn-danger(
+                    button.btn.btn-danger.btn-lg(
                     type='submit'
-                    data-loading-text="<i class='fa fa-circle-o-notch fa-spin' /> 잠시만 기다려주세요...") 투표하기
+                    style='margin: 30px') 투표하기
+block script
     script(src='/javascripts/vote.js')

@@ -31,36 +31,31 @@ block content
                     | 님이 당선되셨습니다!
             h3 후보자 목록
             p
-                -val = 1
-                .card-deck
-                    each candidate in electionDetail.candidateList
-                        .card(style='width: 15rem;')
-                            .card-body
-                                if(electionDetail.tallyResult)
-                                    -percentage = electionDetail.tallyResult[val-1]/electionDetail.ballotCount
-                                    p.card-text 득표수 : #{electionDetail.tallyResult[val-1]}표(#{percentage}%)
-                                h5.card-title
-                                    b #{val}
-                                    | #{": " + candidate.name}
-                                if(candidate.commitment.includes("http"))
-                                    -onClick = "window.open('" + candidate.commitment + "')"
-                                    button.btn.btn-success(onclick=onClick) 공약보기
-                                else
-                                    button.btn.btn-success(type='button', data-toggle='modal', data-target='#commitmentModal')
-                                        | 공약보기
-                                    // Modal
-                                    #commitmentModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='modalCenterTitle', aria-hidden='true')
-                                        .modal-dialog.modal-dialog-centered(role='document')
-                                            .modal-content
-                                                .modal-header
-                                                    h5#modalLongTitle.modal-title #{candidate.name}의 공약
-                                                    button.close(type='button', data-dismiss='modal', aria-label='Close')
-                                                        span(aria-hidden='true') ×
-                                                .modal-body
-                                                    | #{candidate.commitment}
-                                                .modal-footer
-                                                    button.btn.btn-secondary(type='button', data-dismiss='modal') 닫기
-                        -val += 1
+                -val = 0
+                .card-deck-wrapper
+                    .card-deck
+                        each candidate in electionDetail.candidateList
+                            .card(style='width: 15rem;')
+                                .card-body
+                                    if(electionDetail.tallyResult)
+                                        -percentage = electionDetail.tallyResult[val-1]/electionDetail.ballotCount
+                                        p.card-text 득표수 : #{electionDetail.tallyResult[val-1]}표(#{percentage}%)
+                                    h5.card-title
+                                        b #{val+1}
+                                        | #{": " + candidate.name}
+                                    if(candidate.commitment.includes("http"))
+                                        -onClick = "window.open('" + candidate.commitment + "')"
+                                        button.btn.btn-success(onclick=onClick) 공약보기
+                                    else
+                                        -commitmentBtnId=`commitmentBtn${val}`
+                                        button.btn.btn-success(
+                                        id=commitmentBtnId,
+                                        type='button',
+                                        data-toggle='modal',
+                                        data-target='#commitmentModal')
+                                            | 공약보기
+                                        p(hidden) #{candidate.commitment}
+                            -val += 1
             if(user && !electionDetail.owner)
                 if(electionDetail.voterState !== "Voted")
                     .text-center
@@ -129,4 +124,21 @@ block content
                                     format: 'yyyy-m-dd HH:MM'
                                 });
                         button.btn.btn-default(type='submit') 정보 변경
+            // 공약보기 Modal 창
+            #commitmentModal.modal.fade(
+                tabindex='-1',
+                role='dialog',
+                aria-labelledby='modalCenterTitle',
+                aria-hidden='true')
+                .modal-dialog.modal-dialog-centered(role='document')
+                    .modal-content
+                        .modal-header
+                            h5#modalTitle.modal-title
+                            button.close(type='button', data-dismiss='modal', aria-label='Close')
+                                span(aria-hidden='true') ×
+                        #modalContent.modal-body
+                            |
+                        .modal-footer
+                            button.btn.btn-secondary(type='button', data-dismiss='modal') 닫기
+block script
     script(src="/javascripts/election.detail.js")
