@@ -52,7 +52,6 @@ exports.logout = (req, res, next) => {
 };
 
 exports.myInfo = async (req, res) => {
-    // TODO: 변수명과 election 컨트롤러 고쳐야함
     if (!req.user) {
         res.redirect('/login')
     }
