@@ -12,9 +12,9 @@ module.exports = (deployer, network, accounts) =>
 
         await deployedElectionFactory.makeNewElection(
             // '대전 지방선거'
-            'Daejeon local election',
+            'Daejeon Mayoral Election',
             // '이번 선거에서 선출된 공직자의 임기는 4년(2018. 7. 1.~2022. 6. 30.)이며, 재보궐선거의 경우 전임자의 잔여임기(~2020. 5. 29.)까지 업무를 수행하게 된다.',
-            'The Daejeon local election is an election of the Republic of Korea to elect local councilors and heads of local autonomous bodies that make up the local council.',
+            'The Daejeon Mayoral Election is an election of the Republic of Korea to elect mayor of Daejeon.',
             accounts[1],
             timeUtil.dateStringToTimestamp('09/10/2018 06:00:00'),
             timeUtil.dateStringToTimestamp('10/10/2018 18:00:00'),
@@ -25,7 +25,7 @@ module.exports = (deployer, network, accounts) =>
 
         // 지방선거 투표에 후보자 추가
         const deployedRegionElection = await Election.at(deployedPublicElections[0]);
-        const regionCandidateList = ['John Doe','Jane Roe','John Smith','Jane Smith'] //['홍길동', '김영희', '박철수', '고길동'];
+        const regionCandidateList = ['Hong Gil-Dong','Kim Young-Hee','Park Cheol-soo','Go gil-dong']; //['홍길동', '김영희', '박철수', '고길동'];
         const regionCandidateCommitment = [
             'I will do my best for the citizens!',
             'I will do the right politics!',
