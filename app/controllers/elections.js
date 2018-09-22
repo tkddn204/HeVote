@@ -34,17 +34,6 @@ exports.create = (req, res) => {
     if (!req.user) {
         res.redirect('/login')
     }
-    // const to = 'kluge0221@gmail.com';
-    // const title = req.body.votetitle;
-    // const content = req.body.votecontent;
-    //
-    // mailer('already setting', to, title, content, function (err) {
-    //     if (err) {
-    //         console.log('메일발송에러' + err);
-    //     } else {
-    //         res.send('메일 발송 완료');
-    //     }
-    // });
 
     res.redirect('/createRequest');
 };
