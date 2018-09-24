@@ -4,7 +4,7 @@ const fs = require('fs');
 // TODO: 오류 발생(cb의 파라미터)할 때의 동작 추가
 class Hec {
     /**
-     * 공개키와 비밀키 파일들을 만드는 API
+     * 공개키와 비밀키 파일들을 만드는 메소드
      *
      * @param {string} o 선거 컨트렉트 주소
      * @param {int} p 후보자의 수(소수)
@@ -27,7 +27,7 @@ class Hec {
     }
 
     /**
-     * 후보자 벡터 파일들을 만드는 API
+     * 후보자 벡터 파일들을 만드는 메소드
      *
      * @param {string} o 선거 컨트렉트 주소
      * @param {string} v 유권자의 계정 주소
@@ -50,7 +50,7 @@ class Hec {
     }
 
     /**
-     * 투표를 최종 집계하는 API
+     * 투표를 최종 집계하는 메소드
      * 집계 결과를 반환함
      *
      * @param {string} o 선거 컨트렉트 주소

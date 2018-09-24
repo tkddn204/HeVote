@@ -41,7 +41,7 @@ exports.getElectionSummary = async (electionAddress) => {
     const rawSummary = await Election(electionAddress).methods.getElectionSummary().call();
     const startDate = timeUtil.timestampToDate(rawSummary['3']);
     const endDate = timeUtil.timestampToDate(rawSummary['4']);
-    return await {
+    return {
         electionName: rawSummary['0'],
         electionDescription: rawSummary['1'],
         electionState: electionState[rawSummary['2']],
@@ -87,7 +87,6 @@ exports.vote = async (electionAddress, voterAddress, candidateHash) => {
 
 exports.getElectionSummaryList = async (opts) => {
     let electionAddressList;
-    let electionSummaryList;
 
     if(opts.isFinite !== undefined) {
         // 보통 목록을 불러올 때
@@ -100,9 +99,7 @@ exports.getElectionSummaryList = async (opts) => {
     } else {
         return undefined;
     }
-
-    electionSummaryList = await electionAddressList.map(
-        async (electionAddress) => await this.getElectionSummary(electionAddress));
-
-    return await Promise.all(electionSummaryList);
+    const electionSummaryList = electionAddressList.map(
+        (electionAddress) => this.getElectionSummary(electionAddress));
+    return Promise.all(electionSummaryList);
 };

@@ -1,5 +1,8 @@
 const ElectionFactory = require('../factory');
 
+const getOwner = async () =>
+    await ElectionFactory.methods.owner().call();
+
 const getDeployedElections = async (isFinite) =>
     await ElectionFactory.methods.getDeployedElections(isFinite).call();
 
@@ -25,6 +28,7 @@ const makeNewElection = async (adminAddress,
     ).send({from: adminAddress});
 
 module.exports = {
+    getOwner,
     getDeployedElections,
     getDeployedElectionsLength,
     makeNewElection

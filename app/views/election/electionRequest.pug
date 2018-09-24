@@ -5,10 +5,10 @@ block content
         if(!user)
             p 로그인이 필요합니다!
         else
-            h1 관리자 - 선거 개설
+            h1 선거 개설 신청
             br
             hr
-            form(role='form', action='/election/create', method="post", style='max-width: 300px;')
+            form(role='form', action='/election/request', method="post", style='max-width: 300px;')
                 .form-group
                     label(for='finiteElection') 선거 공개여부
                     br
@@ -16,17 +16,14 @@ block content
                         option(value='true' selected) 공개
                         option(value='false') 비공개
                     br
-                    label(for='electionOwner') 선거 개설자 주소
-                    input#electionOwner.form-control(type='text', name="electionOwner")
-                    br
                     label(for='electionName') 선거 제목
                     input#electionName.form-control(type='text', name="electionName")
                     br
                     label(for='electionDescription') 선거 설명
                     textarea#electionDescription.form-control(rows='3' name='electionDescription')
                     br
-                    label(for='voterCount') 유권자 수
-                    textarea#electionDescription.form-control(type='text', name="voterCount")
+                    label(for='voterCount') 예상 유권자 수
+                    input#voterCount.form-control(type='number', name="voterCount")
                 .form-group
                     span
                         label(for='startDateTime') 선거 시작 날짜
@@ -34,4 +31,4 @@ block content
                         br
                         label(for='endDateTime') 선거 종료 날짜
                         input#endDateTime(type='datetime-local' width='312' name='endDate')
-                button.btn.btn-default(type='submit') 선거 개설
+                button.btn.btn-default(type='submit') 신청하기

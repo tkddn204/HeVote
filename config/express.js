@@ -1,22 +1,24 @@
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
-// const favicon = require('serve-favicon');
+const favicon = require('serve-favicon');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 // const csrf = require('csurf');
+const methodOverride = require('method-override');
 const flash = require('connect-flash');
 const winston = require('winston');
 const mongoStore = require('connect-mongo')(session);
 
 const config = require('./');
+const middlewares = require('./middlewares');
 
 const env = process.env.NODE_ENV || 'development';
 
 module.exports = (app, passport) => {
     // favicon 설정
-    // app.use(favicon(__dirname + '/public/favicon.ico'));
+    app.use(favicon(`${config.root}/public/favicon.ico`));
 
     app.use(compression());
 
@@ -31,6 +33,9 @@ module.exports = (app, passport) => {
     }
     app.use(logger(log));
 
+    // method-override
+    app.use(methodOverride('X-HTTP-Method-Override'));
+
     // view engine 설정
     app.set('views', `${config.root}/app/views`);
     app.set('view engine', 'pug');
@@ -41,7 +46,6 @@ module.exports = (app, passport) => {
     // bodyParser 설정
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
-
 
     let sessionOptions = {
         secret: process.env.SESSION_SECRET,

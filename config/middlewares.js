@@ -1,7 +1,7 @@
 'use strict';
 
 exports.requireLogin = (req, res, next) => {
-    if(res.locals.user) {
+    if(req.user) {
         res.locals.user = req.user;
         return next();
     }

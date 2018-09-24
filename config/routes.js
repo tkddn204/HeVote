@@ -1,8 +1,8 @@
 const election = require('../app/controllers/elections');
 const accounts = require('../app/controllers/accounts');
 const vote = require('../app/controllers/votes');
-const middleware = require('./middlewares');
 
+const middleware = require('./middlewares');
 const requireLogin = middleware.requireLogin;
 
 /* Router Lists */
@@ -22,9 +22,10 @@ module.exports = (app, passport) => {
         .get('/myInfo', requireLogin, accounts.myInfo)
 
         // elections
-        .get('/election/request', requireLogin, election.createRequest)
-        .post('/election/create', requireLogin, election.create)
-        .get('/election/result', requireLogin, election.createRequestResult)
+        .get('/election/create', requireLogin, election.electionCreatePage)
+        .post('/election/create', requireLogin, election.electionCreate)
+        .get('/election/request', requireLogin, election.electionRequestPage)
+        .post('/election/request', requireLogin, election.electionRequestUser)
         .get('/:election(public|finite)', election.index)
         .get('/:election(public|finite)/:address', election.detail)
         .post('/:election(public|finite)/:address', requireLogin, election.changeState)
@@ -57,15 +58,4 @@ module.exports = (app, passport) => {
             });
         });
     }
-
-    // production error handler
-    // no stacktraces leaked to user
-    app.use(function (err, req, res) {
-        res.status(err.status || 500);
-        res.render('base/error', {
-            message: err.message,
-            error: {}
-        });
-    });
-
 };

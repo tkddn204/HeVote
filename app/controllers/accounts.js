@@ -2,6 +2,7 @@ const passport = require('passport');
 const Account = require('../models/account');
 const accountApi = require('../ethereum/api/account.api');
 const electionApi = require('../ethereum/api/election.api');
+const electionFactoryApi = require('../ethereum/api/election.factory.api');
 
 exports.register = (req, res) =>
     res.render('account/register');
@@ -55,20 +56,43 @@ exports.myInfo = async (req, res) => {
     if (!req.user) {
         res.redirect('/login')
     }
+
+    const user = req.user;
+
     let votingElectionsSummaryList;
     let deployedElectionsSummaryList;
-    if (req.user.votingElections.length) {
-        votingElectionsSummaryList = await electionApi.getElectionSummaryList({
-            electionList: req.user.votingElections
-        });
+    if (user.votingElections) {
+        if (user.votingElections.length) {
+            try {
+                votingElectionsSummaryList = await electionApi.getElectionSummaryList({
+                    electionList: req.user.votingElections
+                });
+            } catch (e) {
+                votingElectionsSummaryList = [];
+            }
+        }
+    } else {
+        votingElectionsSummaryList = [];
     }
-    if (req.user.deployElections.length) {
-        deployedElectionsSummaryList = await electionApi.getElectionSummaryList({
-            electionList: req.user.deployedElections
-        });
+    if (user.deployElections) {
+        if (user.deployElections.length) {
+            try {
+                deployedElectionsSummaryList = await electionApi.getElectionSummaryList({
+                    electionList: req.user.deployedElections
+                });
+            } catch (e) {
+                deployedElectionsSummaryList = [];
+            }
+        }
+    } else {
+        deployedElectionsSummaryList = [];
     }
+
+    const isAdmin = await electionFactoryApi.getOwner() === req.user.etherAccount;
+
     res.render('account/myInfo', {
         votingElections: votingElectionsSummaryList,
-        deployedElections: deployedElectionsSummaryList
+        deployedElections: deployedElectionsSummaryList,
+        isAdmin: isAdmin
     });
 };

@@ -66,7 +66,6 @@ block content
                         button.btn.btn-primary.btn-lg(
                             onclick=`window.location='${electionInPath}';`
                             disabled=electionButtonDisabled
-                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin' /> 잠시만 기다려주세요..."
                         ) 투표참여
                 else
                     .text-center
@@ -80,11 +79,11 @@ block content
                     data-target='#modifyForm'
                     data-toggle='collapse'
                     aria-expanded="false"
-                    aria-controls="modifyForm") 투표 정보 수정하기
+                    aria-controls="modifyForm") 선거 정보 수정하기
                 #modifyForm.collapse(style='margin: 30px;')
                     form(role='form', action=path, method="post", style='max-width: 300px;')
                         .form-group
-                            label(for='electionState') 투표 상태 변경
+                            label(for='electionState') 선거 상태 변경
                             #electionState.btn-group.btn-group-toggle(data-toggle='buttons')
                                 label.btn.btn-secondary
                                     input#option1(type='radio', name='electionState', value='0' autocomplete='off')
@@ -104,28 +103,19 @@ block content
                     form(role='form', action=path+'/modify', method="post", style='max-width: 300px;')
                         fieldset(disabled)
                             .form-group
-                                label(for='electionName') 투표 제목(변경 불가)
+                                label(for='electionName') 선거 제목(변경 불가)
                                 input#electionName.form-control(type='text', placeholder=electionDetail.summary.electionName)
                         .form-group
-                            label(for='electionDescription') 투표 설명
+                            label(for='electionDescription') 선거 설명
                             textarea#electionDescription.form-control(rows='3' name='electionDescription') #{electionDetail.summary.electionDescription}
                         .form-group
                             span
-                                label(for='startDateTimePicker') 투표 시작 날짜
-                                input#startDateTimePicker(width='312' name='startDate' value=electionDetail.summary.startDate)
+                                label(for='startDateTime') 선거 시작 날짜
+                                input#startDateTime(type='datetime-local' name='startDate' value=electionDetail.summary.startDate)
                                 br
-                                label(for='endDateTimePicker') 투표 종료 날짜
-                                input#endDateTimePicker(width='312' name='endDate' value=electionDetail.summary.endDate)
-                            script.
-                                $('#startDateTimePicker').datetimepicker({
-                                    uiLibrary: 'bootstrap4',
-                                    format: 'yyyy-m-dd HH:MM'
-                                });
-                                $('#endDateTimePicker').datetimepicker({
-                                    uiLibrary: 'bootstrap4',
-                                    format: 'yyyy-m-dd HH:MM'
-                                });
-                        button.btn.btn-default(type='submit') 정보 변경
+                                label(for='endDateTime') 선거 종료 날짜
+                                input#endDateTime(type='datetime-local' name='endDate' value=electionDetail.summary.endDate)
+                        button.btn.btn-default(type='submit') 선거 정보 변경
             // 공약보기 Modal 창
             #commitmentModal.modal.fade(
                 tabindex='-1',

@@ -1,18 +1,25 @@
 const fs = require('fs');
 const path = require('path');
+
 const electionApi = require('../ethereum/api/election.api');
+const electionFactoryApi = require('../ethereum/api/election.factory.api');
 const candidateApi = require('../ethereum/api/candidate.api');
 const voterApi = require('../ethereum/api/voter.api');
-const mkdirSync = require('../utils/fs.util').mkdirSync;
+
+const electionRequest = require('../models/election.request');
+
 const hec = require('../hec/hec');
 const ipfs = require('../ipfs/ipfs');
+
+const mkdirSync = require('../utils/fs.util').mkdirSync;
+const dateStringToTimestamp = require('../utils/time.util').dateStringToTimestamp;
 
 
 exports.index = async (req, res) => {
     try {
         const electionSummaryList =
             await electionApi.getElectionSummaryList({
-                "isFinite": req.originalUrl === '/finite'
+                isFinite: req.originalUrl === '/finite'
             });
         res.render('election/electionList', {
             isFinite: req.originalUrl === '/finite' ? 'finite' : 'public',
@@ -23,23 +30,80 @@ exports.index = async (req, res) => {
     }
 };
 
-exports.createRequest = (req, res) => {
-    if (!req.user) {
-        res.redirect('/login')
-    }
+exports.electionRequestPage = (req, res) =>
+    res.render('election/electionRequest');
+
+exports.electionRequestUser = (req, res) => {
+    const data = req.body;
+
+    // 데이터 가공
+    data.finiteElection = data.finiteElection === 'true';
+    data.startDate = dateStringToTimestamp(data.startDate);
+    data.endDate = dateStringToTimestamp(data.endDate);
+
+    // mongoDB에 요청을 저장합니다.
+    data.userName = req.user.username;
+    data.electionOwner = req.user.etherAccount;
+    const election = new electionRequest(data);
+    election.save((err) => {
+        if (err) return res.send(err.message);
+        return res.redirect('/');
+    });
+};
+
+exports.electionCreatePage = (req, res) =>
     res.render('election/electionCreate');
-};
 
-exports.create = (req, res) => {
-    if (!req.user) {
-        res.redirect('/login')
+// number보다 큰 수 중에서 가장 작은 소수를 찾는 메소드
+function getPrimeNumber(number) {
+
+    // 소수를 구하기 위한 반복문(number+100까지)
+    for (let i = number; i <= number + 100; i++) {
+        let isPrimeNumber = true;
+        // 1과 자기 자신을 제외한 정수 중에 나눠지는 정수가 있는지 체크
+        const rootOfNumber = Math.sqrt(i);
+        for (let j = 2; j < rootOfNumber; j++) {
+            if (i % j === 0) {
+                isPrimeNumber = false;
+            }
+        }
+
+        // 소수이면 결과값을 반환
+        if (isPrimeNumber) {
+            return i;
+        }
     }
 
-    res.redirect('/createRequest');
-};
+    return undefined;
+}
 
-exports.createRequestResult = (req, res) =>
-    res.render('election/electionRequestResult');
+exports.electionCreate = async (req, res) => {
+    const adminAddress = await electionFactoryApi.getOwner();
+    if (req.user.etherAccount !== adminAddress) {
+        res.send("관리자만 이용 가능합니다.")
+    }
+
+    const data = req.body;
+
+    const election = await electionFactoryApi.makeNewElection(adminAddress,
+        data.electionName, data.electionDescription, data.electionOwner,
+        data.startDate, data.endDate, "", data.finiteElection);
+    console.log(election);
+    const voterCountPrime = getPrimeNumber(data.voterCount);
+    const L = 6 + 2 * Math.ceil(Math.log(voterCountPrime) * 3) / (Math.log(2.0) * 44) + 1;
+    console.log(voterCountPrime, L);
+    // hec으로 공개키를 저장합니다.
+    // await hec.createKeys(deployedPublicElections[0], voterCountPrime, L, 'data', async () => {
+    //     const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";
+    //     const fileSize = fs.statSync(publicKeyFilePath).size;
+    //     if (fileSize > 0) {
+    //         console.log("good. Key files saved");
+    //     } else {
+    //         console.error("failed: file not Saved");
+    //     }
+    // });
+    res.send("완료");
+};
 
 exports.detail = async (req, res) => {
     const electionAddress = req.params.address;
@@ -145,8 +209,6 @@ exports.changeState = async (req, res) => {
     }
 };
 exports.changeInformation = async (req, res) => {
-    if (!req.user) res.redirect('/login');
-
     const electionAddress = req.params.address;
     const ownerAddress = req.user.etherAccount;
 

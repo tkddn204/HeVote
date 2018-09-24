@@ -27,11 +27,9 @@ Express.js+mongoDB를 사용한 정적 웹 으로 사용자에게 쉽고 편리�
 
 ## Examples
 
-## Thanks To
+## References
 - [passport-local-express4](https://github.com/mjhea0/passport-local-express4)를 포크했습니다.
-로그인의 벽에 부딪혔을 때 구원해주신 [mjhea0](https://github.com/mjhea0)에게 감사의 말씀을 드립니다.
-- 디렉토리 구조는 [node-express-mongoose-demo](https://github.com/madhums/node-express-mongoose-demo)를 사용했습니다.
-마찬가지로 어려움에 도움을 주신 [madhums](https://github.com/madhums)에게 감사의 말씀을 드립니다.
+- [node-express-mongoose-demo](https://github.com/madhums/node-express-mongoose-demo)
 
 ## License
 HeVote는 [MIT License](https://github.com/HanBae/HeVote/blob/master/LICENSE) 하에 관리됩니다.
