@@ -9,13 +9,12 @@ node_modules
 *.out
 npm-debug.log
 *.html
-config/email-config.js
 package-lock.json
+
+
+# ethereum build files
+app/ethereum/build/
 config/contract-address.json
-
-
-# ethereum build directory
-ethereum/build/
 
 
 # HElib
