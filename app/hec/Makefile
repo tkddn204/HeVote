@@ -36,23 +36,20 @@ BIN_DIR = ./bin
 fhe.a = ./HElib/fhe.a
 
 # ref: https://stackoverflow.com/a/4320498
-# OBJECTS = createKeys.o encrypt_candidate_list.o tally.o
-
-testx: test.cpp fhe.a
-        $(CC) $(CFLAGS) -o $@ $< fhe.a $(LDLIBS)
+# OBJECTS = createKeys.o encryptCandidateList.o tally.o
 
 all: $(OBJECTS)
 
 # ref: https://stackoverflow.com/a/7005912
 OBJECTS := $(SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 $(OBJECTS): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp fhe.a
-        $(CC) $(CFLAGS) -c $< -o fhe.a $@ $(LDLIBS)
-        @echo "Compiled "$<" successfully!"
+    $(CC) $(CFLAGS) -c $< -o fhe.a $@ $(LDLIBS)
+    @echo "Compiled "$<" successfully!"
 
 clean:
-        rm -f $(OBJ_DIR)/*.o $(BIN_DIR)/*
+    rm -f $(OBJ_DIR)/*.o $(BIN_DIR)/*
 
 info:
-        : Homomorphic Encryption Connector(for HeVote) require HElib.
-        : please execute `make` at app/hec/HElib.
-        :
+    : Homomorphic Encryption Connector(for HeVote) require HElib.
+    : please execute `make` at app/hec/HElib.
+    :

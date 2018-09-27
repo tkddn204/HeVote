@@ -59,7 +59,7 @@ class Hec {
      * @param {function} cb exec 처리가 끝난 후의 콜백 함수
      */
     static async encryptCandidateList(o, v, t, dir, cb) {
-        const command = `${config.root}/app/hec/encrypt_candidate_list o=${o.toLowerCase()} v=${v.toLowerCase()} t=${t} dir=${dir}`;
+        const command = `${config.root}/app/hec/encryptCandidateList o=${o.toLowerCase()} v=${v.toLowerCase()} t=${t} dir=${dir}`;
         console.debug(command);
 
         let out, err;
