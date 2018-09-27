@@ -2,8 +2,8 @@ const fs = require('fs');
 const timeUtil = require('../../utils/time.util');
 const ElectionFactory = artifacts.require('./ElectionFactory.sol');
 const Election = artifacts.require('./Election.sol');
-const hec = require('../../hec/hec.js');
 const config = require('../../../config');
+const Hec = require("../../hec/hec")();
 
 module.exports = (deployer, network, accounts) =>
     deployer.then(async () => {
@@ -60,7 +60,7 @@ module.exports = (deployer, network, accounts) =>
         });
 
         // hec으로 공개키를 저장합니다.
-        await hec.createKeys(deployedPublicElections[0], 10007, 7, 'data', async () => {
+        await Hec.createKeys(deployedPublicElections[0], 10007, 7, 'data', async () => {
             const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";
             const fileSize = fs.statSync(publicKeyFilePath).size;
             if (fileSize > 0) {

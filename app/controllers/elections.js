@@ -8,7 +8,7 @@ const voterApi = require('../ethereum/api/voter.api');
 
 const electionRequest = require('../models/election.request');
 
-const hec = require('../hec/hec');
+const Hec = require('../hec/hec')();
 const ipfs = require('../ipfs/ipfs');
 
 const mkdirSync = require('../utils/fs.util').mkdirSync;
@@ -183,13 +183,13 @@ exports.changeState = async (req, res) => {
                         if (lock === files.length) {
                             // 동형암호로 집계를 한다
                             const candidateListLength = await candidateApi.getCandidateLength(electionAddress);
-                            await hec.tally(electionAddress, candidateListLength,
+                            await Hec.tally(electionAddress, candidateListLength,
                                 "data", async (out, err) => {
                                     if (err) {
                                         return res.send(err);
                                     }
                                     console.log(out);
-                                    const resultArray = hec.getResult(electionAddress);
+                                    const resultArray = Hec.getResult(electionAddress);
                                     // 이더리움에 결과 저장
                                     await electionApi.setTallyResult(electionAddress, ownerAddress, resultArray.toString());
 

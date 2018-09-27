@@ -4,7 +4,7 @@ const electionApi = require('../ethereum/api/election.api');
 const candidateApi = require('../ethereum/api/candidate.api');
 const voterApi = require('../ethereum/api/voter.api');
 const Account = require('../models/account');
-const hec = require('../hec/hec');
+const Hec = require('../hec/hec')();
 const ipfs = require('../ipfs/ipfs');
 const config = require('../../config');
 const mkdirSync = require('../utils/fs.util').mkdirSync;
@@ -35,7 +35,7 @@ module.exports = {
                     });
                 }
                 const total = electionDetail.candidateList.length;
-                await hec.encryptCandidateList(electionAddress, voterAddress,
+                await Hec.encryptCandidateList(electionAddress, voterAddress,
                     total, `${config.root}/data`, (out, err) => {
                         if (err) console.error(err);
                         console.log(out);

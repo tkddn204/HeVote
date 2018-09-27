@@ -3,6 +3,29 @@ const fs = require('fs');
 const config = require('../../config');
 
 class Hec {
+
+    /**
+     * 생성자
+     *
+     * data 폴더와 그 폴더 안의 publicKey, secretKey, candidate, result 폴더가 있는지 없는지 검사한 후
+     * 없으면 폴더를 생성함
+     */
+    constructor() {
+        const root = config.root;
+        const dataPaths = [
+            `${root}/data`,
+            `${root}/data/publicKey`,
+            `${root}/data/secretKey`,
+            `${root}/data/candidate`,
+            `${root}/data/result`
+        ];
+        dataPaths.forEach((path) => {
+            if(!fs.existsSync(path)) {
+                fs.mkdirSync(path);
+            }
+        });
+    }
+
     /**
      * 공개키와 비밀키 파일들을 만드는 메소드
      *
