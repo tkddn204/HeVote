@@ -13,20 +13,20 @@ config/email-config.js
 package-lock.json
 config/contract-address.json
 
-# custom
+
 # ethereum build directory
 ethereum/build/
 
+
+# HElib
+app/hec/HElib/
+
 # data directorys
-data/candidate/*
-data/publicKey/*
-data/secretKey/*
-data/result/*
+data/
 
 # hec exec binary files
-hec/bin/createKeys
-hec/bin/encrypt_candidate_list
-hec/bin/tally
+app/hec/bin/
+
 
 # env file
 .env

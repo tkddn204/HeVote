@@ -8,7 +8,7 @@ const voterApi = require('../ethereum/api/voter.api');
 
 const electionRequest = require('../models/election.request');
 
-const Hec = require('../hec/hec')();
+const Hec = require('../hec/hec');
 const ipfs = require('../ipfs/ipfs');
 
 const mkdirSync = require('../utils/fs.util').mkdirSync;

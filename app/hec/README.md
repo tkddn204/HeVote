@@ -5,13 +5,13 @@ HEC는 HeVote를 위한 동형암호 커넥터(Homomorphic Encription Connector)
 모듈 맨 위에 다음 코드만 입력하여 함수를 사용하면 됩니다!
 
 ```
-const Hec = require('../hec/hec')();
+const Hec = require('../hec/hec');
 ```
 
 ## Example
 
 ```
-const Hec = require('../hec/hec')();
+const Hec = require('../hec/hec');
 
 await Hec.createKeys(deployedPublicElections[0], 10007, 7, 'data', async () => {
             const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";

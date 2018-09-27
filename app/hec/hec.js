@@ -120,5 +120,5 @@ class Hec {
 }
 
 if (typeof module !== 'undefined') {
-    module.exports = Hec
+    module.exports = new Hec()
 }

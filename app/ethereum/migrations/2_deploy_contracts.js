@@ -3,7 +3,7 @@ const timeUtil = require('../../utils/time.util');
 const ElectionFactory = artifacts.require('./ElectionFactory.sol');
 const Election = artifacts.require('./Election.sol');
 const config = require('../../../config');
-const Hec = require("../../hec/hec")();
+const Hec = require("../../hec/hec");
 
 module.exports = (deployer, network, accounts) =>
     deployer.then(async () => {
