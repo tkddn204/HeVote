@@ -12,8 +12,10 @@
 
 CC = g++
 
+HELIB_DIR = HElib/src
+
 #CFLAGS = -g -O2 -std=c++11 -DDEBUG_PRINTOUT -Wfatal-errors -Wshadow -Wall -I/usr/local/include
-CFLAGS = -g -O2 -std=c++11 -pthread -DFHE_THREADS -DFHE_BOOT_THREADS -fmax-errors=2
+CFLAGS = -g -O2 -std=c++11 -pthread -DFHE_THREADS -DFHE_BOOT_THREADS -fmax-errors=2 -I$(HELIB_DIR)
 
 #  If you get compilation errors, you may need to add -std=c++11 or -std=c++0x
 $(info HElib requires NTL version 10.0.0 or higher, see http://shoup.net/ntl)
@@ -29,27 +31,33 @@ NTL=-lntl
 #       against them as dynamic libraries.
 LDLIBS = -L/usr/local/lib $(NTL) $(GMP) -lm
 
+OBJ = $(HELIB_DIR)/NumbTh.o $(HELIB_DIR)/timing.o $(HELIB_DIR)/bluestein.o $(HELIB_DIR)/PAlgebra.o  $(HELIB_DIR)/CModulus.o $(HELIB_DIR)/FHEContext.o $(HELIB_DIR)/IndexSet.o $(HELIB_DIR)/DoubleCRT.o $(HELIB_DIR)/FHE.o $(HELIB_DIR)/KeySwitching.o $(HELIB_DIR)/Ctxt.o $(HELIB_DIR)/EncryptedArray.o $(HELIB_DIR)/replicate.o $(HELIB_DIR)/hypercube.o $(HELIB_DIR)/matching.o $(HELIB_DIR)/powerful.o $(HELIB_DIR)/BenesNetwork.o $(HELIB_DIR)/permutations.o $(HELIB_DIR)/PermNetwork.o $(HELIB_DIR)/OptimizePermutations.o $(HELIB_DIR)/eqtesting.o $(HELIB_DIR)/polyEval.o $(HELIB_DIR)/extractDigits.o $(HELIB_DIR)/EvalMap.o $(HELIB_DIR)/recryption.o $(HELIB_DIR)/debugging.o $(HELIB_DIR)/matmul.o $(HELIB_DIR)/intraSlot.o $(HELIB_DIR)/binaryArith.o $(HELIB_DIR)/binaryCompare.o $(HELIB_DIR)/tableLookup.o $(HELIB_DIR)/binio.o
+
 SRC_DIR = ./src
-OBJ_DIR = ./obj
 BIN_DIR = ./bin
 
-fhe.a = ./HElib/fhe.a
+fhe.a = $(HELIB_DIR)/fhe.a
 
 # ref: https://stackoverflow.com/a/4320498
-# OBJECTS = createKeys.o encryptCandidateList.o tally.o
-
-all: $(OBJECTS)
 
 # ref: https://stackoverflow.com/a/7005912
-OBJECTS := $(SOURCES:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
-$(OBJECTS): $(OBJ_DIR)/%.o : $(SRC_DIR)/%.cpp fhe.a
-    $(CC) $(CFLAGS) -c $< -o fhe.a $@ $(LDLIBS)
-    @echo "Compiled "$<" successfully!"
+BINARYS = $(BIN_DIR)/createKeys $(BIN_DIR)/encryptCandidateList $(BIN_DIR)/tally
+
+all: $(BINARYS)
+
+$(HELIB_DIR)/fhe.a: $(OBJ)
+	$(AR) $(ARFLAGS) fhe.a $(OBJ)
+
+$(BIN_DIR)/%: $(SRC_DIR)/%.cpp $(HELIB_DIR)/fhe.a
+	$(CC) $(CFLAGS) -o $@ $< $(fhe.a) $(LDLIBS)
+	@echo "Compiled "$<" successfully!"
+
+# g++ -g -O2 -std=c++11 -pthread -DFHE_THREADS -DFHE_BOOT_THREADS -fmax-errors=2 -o testx test.cpp fhe.a -L/usr/local/lib -lntl -lgmp -lm
 
 clean:
-    rm -f $(OBJ_DIR)/*.o $(BIN_DIR)/*
+	rm -f $(BIN_DIR)/*
 
 info:
-    : Homomorphic Encryption Connector(for HeVote) require HElib.
-    : please execute `make` at app/hec/HElib.
-    :
+	: Homomorphic Encryption Connector(for HeVote) require HElib.
+	: please execute `make` at app/hec/HElib.
+	:
