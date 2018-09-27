@@ -9,6 +9,12 @@ HeVote의 서버를 구동하기 위해서는 다음과 같은 구성요소가 �
     - 8 이상 버전을 권장합니다.
 - [ganache](https://truffleframework.com/ganache)([ganache-cli](https://github.com/trufflesuite/ganache-cli)) or [geth](https://github.com/ethereum/go-ethereum)(숙련자용)
     - **최신 버전**을 권장합니다.
+- [MongoDB](https://www.mongodb.com/)
+    - 개발 시 **2.6.10** 버전을 이용했기에, 그 이상의 버전을 권장합니다.
+- option: [IPFS](https://ipfs.io/)
+    - 따로 IPFS의 노드를 운용하셔서 연결하실수도 있습니다.
+    - default: [INFURA](https://infura.io)의 IPFS 노드를 사용합니다.
+    - 자신의 노드를 사용하실 분만 설치하시면 됩니다.
 
 ## Install HeVote
 설치할 것이 생각보다 많습니다. 하지만 참고 천천히 잘 따라와 주신다면, 웅장한(?) HeVote의 모습을 보실 수 있을 겁니다!
