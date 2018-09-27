@@ -1,6 +1,7 @@
 # Installation Guide
 ## Recommended Environments
-우분투 환경에서 구동하는 것을 추천합니다. 분명, 다른 OS로도 구동할 수 있는 방법이 존재할 수 있습니다!
+우분투 환경에서 구동하는 것을 추천합니다.
+
 - [Ubuntu](https://www.ubuntu.com/) 16.04 / 18.04 LTS (64-bit)
 
 ## Requirements
@@ -41,11 +42,14 @@ truffle을 설치하는 동안, HElib을 설치해주세요(시간이 오래 걸
 
 1. HElib의 [INSTALL.txt](https://github.com/shaih/HElib/blob/master/INSTALL.txt)를 참조하여 GMP와 NTL의 설치를 진행하세요.
 2. (★**중요!**)GMP와 NTL의 설치가 모두 끝나면, HElib를 clone하여 HeVote의 `app/hec/HElib` 안에 넣어주세요.
-    1. `git clone https://github.com/shaih/HElib`
-    2. `mv HElib HeVote/app/hec/HElib`
-    3. `cd HeVote/app/hec/HElib/`
+   다음 명령어를 입력해주시면 됩니다.
+```
+git clone https://github.com/shaih/HElib
+mv HElib HeVote/app/hec/HElib
+cd HeVote/app/hec/HElib/
+```
 3. 이후 INSTALL.txt의 절차에 따라 `make`를 진행해주시고,
-4. `cd app/hec` 으로 돌아오셔서 `make install`을 한번 하셔서 컴파일을 해주시면 됩니다.
+4. `cd app/hec` 으로 돌아오셔서 `make install`을 한번 하셔서 실행파일 컴파일을 해주시면 됩니다.
 
 > ※ **Caution!**
 >
@@ -62,5 +66,5 @@ truffle을 설치하는 동안, HElib을 설치해주세요(시간이 오래 걸
 npm install
 ```
 
-혹시 설치 중에 문제가 발생하시면, 언제든지 제 [메일](mailto:tkddn204@gmail.com?subject="HeVote 설치 문제")
+혹시 설치 중에 문제가 발생하시면, 언제든지 제 [메일](mailto:tkddn204@gmail.com?subject=[HeVote]%20설치%20문제)
 또는 [Issue](https://github.com/HanBae/HeVote/issues/new)에 질문을 남겨주세요!

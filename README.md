@@ -1,7 +1,9 @@
 # HeVote
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/HanBae/HeVote/blob/master/LICENSE)
 
-HeVote는 동형암호를 사용한 블록체인 기반 전자투표 시스템(ÐApp)입니다.
+~~(GIF 추가 예정)~~
+
+HeVote는 동형암호를 사용한 이더리움 & IPFS 기반 전자투표 시스템(ÐApp)입니다.
 
 ## Introduction
 HeVote는 전자투표의 개설부터 투표, 집계까지 할 수 있습니다.
@@ -26,7 +28,7 @@ Express.js+mongoDB를 사용한 정적 웹 으로 사용자에게 쉽고 편리�
 - IPFS 노드는 블록체인 파일시스템으로써 동형암호의 공개키나 암호문을 반영구적으로 블록체인에 저장하고, 저장한 뒤의 SHA-1 형태의 Hash값을 ÐApp 서버로 반환해주는 용도로 사용합니다.
 
 ## Functional Features
-자세한 설명은 [Detail Functional Features](https://github.com/HanBae/HeVote/blob/master/docs/DETAILED_FEATURES.md)를 참고해주세요!
+자세한 설명은 [Detailed Features](https://github.com/HanBae/HeVote/blob/master/docs/DETAILED_FEATURES.md)를 참고해주세요!
 - 일반 사용자는 Metamask 및 Mist 등의 이더리움 지갑 없이 ÐApp을 사용할 수 있습니다.
 - 일반 사용자는 선거를 개설하고 싶다고 관리자에게 요청할 수 있습니다.
 - 관리자는 선거 개설 요청 리스트를 볼 수 있습니다. (예정)
@@ -42,15 +44,13 @@ Express.js+mongoDB를 사용한 정적 웹 으로 사용자에게 쉽고 편리�
 [Installation Guide](https://github.com/HanBae/HeVote/blob/master/docs/INSTALLATION_GUIDE.md)를 참고하세요!
 
 ## Get Started
-> Note
->
-> 위 [Installation Guide](https://github.com/HanBae/HeVote/blob/master/docs/INSTALLATION_GUIDE.md)에 따라
-> 모두 설치하신 분만 따라오실 수 있습니다!
-
-~~작성중~~
+[Get Started](https://github.com/HanBae/HeVote/blob/master/docs/GET_STARTED.md)를 참고하세요!
 
 ## Demo
-~~(youtube 동영상)~~
+~~(youtube 동영상 추가 예정)~~
+
+## TODO
+[TODO List](https://github.com/HanBae/HeVote/blob/master/docs/TODO_LIST.md)에 향후 개발해야할 내역들을 포함하고 있습니다!
 
 ## References
 - fork to [passport-local-express4](https://github.com/mjhea0/passport-local-express4)

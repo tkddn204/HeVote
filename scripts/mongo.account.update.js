@@ -17,7 +17,6 @@ Account.findOne({
     let user = result;
     if (err) {
         console.log(err);
-        // TODO: 못찾았을때 오류로 변경
         if(user === undefined) {
 
             // 계정을 만듦

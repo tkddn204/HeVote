@@ -14,14 +14,19 @@ package-lock.json
 config/contract-address.json
 
 # custom
-build/
+# ethereum build directory
 ethereum/build/
-hec/data/candidate/*
-hec/data/publicKey/*
-hec/data/secretKey/*
-hec/data/result/*
-hec/createKeys
-hec/encrypt_candidate_list
-hec/tally
 
+# data directorys
+data/candidate/*
+data/publicKey/*
+data/secretKey/*
+data/result/*
+
+# hec exec binary files
+hec/bin/createKeys
+hec/bin/encrypt_candidate_list
+hec/bin/tally
+
+# env file
 .env

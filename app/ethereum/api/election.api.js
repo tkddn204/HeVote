@@ -93,7 +93,6 @@ exports.getElectionSummaryList = async (opts) => {
         const isFiniteElection = opts.isFinite;
         electionAddressList = await Factory.methods.getDeployedElections(isFiniteElection).call();
     } else if (opts.electionList !== undefined){
-        // TODO: 공개선거와 유권자 한정 선거 나누기
         // MongoDB에서 선거 목록을 불러올 때
         electionAddressList = opts.electionList.map(election => election.address);
     } else {

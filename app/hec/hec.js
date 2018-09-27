@@ -1,7 +1,7 @@
 const execSync = require('child_process').execSync;
 const fs = require('fs');
+const config = require('../../config');
 
-// TODO: 오류 발생(cb의 파라미터)할 때의 동작 추가
 class Hec {
     /**
      * 공개키와 비밀키 파일들을 만드는 메소드
@@ -13,7 +13,7 @@ class Hec {
      * @param {function} cb exec 처리가 끝난 후의 콜백 함수
      */
     static async createKeys(o, p=13, L=3, dir, cb) {
-        const command = `./app/hec/createKeys o=${o} p=${p} L=${L} dir=${dir}`;
+        const command = `${config.root}/app/hec/bin/createKeys o=${o} p=${p} L=${L} dir=${dir}`;
         console.debug(command);
 
         let out, err;
@@ -36,7 +36,7 @@ class Hec {
      * @param {function} cb exec 처리가 끝난 후의 콜백 함수
      */
     static async encryptCandidateList(o, v, t, dir, cb) {
-        const command = `./app/hec/encrypt_candidate_list o=${o.toLowerCase()} v=${v.toLowerCase()} t=${t} dir=${dir}`;
+        const command = `${config.root}/app/hec/encrypt_candidate_list o=${o.toLowerCase()} v=${v.toLowerCase()} t=${t} dir=${dir}`;
         console.debug(command);
 
         let out, err;
@@ -60,7 +60,7 @@ class Hec {
      * @param {function} cb exec 처리가 끝난 후의 콜백 함수
      */
     static async tally(o, n, dir, cb) {
-        const command = `./app/hec/tally o=${o.toLowerCase()} n=${n} dir=${dir}`;
+        const command = `${config.root}/app/hec/tally o=${o.toLowerCase()} n=${n} dir=${dir}`;
         console.debug(command);
 
         let out, err;
@@ -82,7 +82,7 @@ class Hec {
         // 결과 파일 읽고 배열로 변환
         let resultFile;
         try {
-            resultFile = fs.readFileSync(`data/result/${o.toLowerCase()}.txt`, 'utf8');
+            resultFile = fs.readFileSync(`${config.root}/data/result/${o.toLowerCase()}.txt`, 'utf8');
         } catch (error) {
             console.debug("file not found");
             return undefined;
