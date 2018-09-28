@@ -7,6 +7,7 @@ const electionRequest = new Schema({
     finiteElection: Boolean,
     electionName: String,
     electionDescription: String,
+    candidateList: String,
     voterCount: Number,
     startDate: Number,
     endDate: Number

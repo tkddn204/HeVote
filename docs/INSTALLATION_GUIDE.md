@@ -20,7 +20,7 @@ HeVote의 서버를 구동하기 위해서는 다음과 같은 구성요소가 �
 ## Install HeVote
 설치할 것이 생각보다 많습니다. 하지만 참고 천천히 잘 따라와 주신다면, 멋진 HeVote의 모습을 보실 수 있을 겁니다.
 
-- **clone**
+### clone
 
 우선, HeVote의 Git Repository를 Clone하셔야 합니다. 설치를 원하시는 폴더에 Clone하시면 됩니다.
 
@@ -28,7 +28,7 @@ HeVote의 서버를 구동하기 위해서는 다음과 같은 구성요소가 �
 git clone https://github.com/HanBae/HeVote
 ```
 
-- **truffle**
+### truffle
 
 스마트 컨트렉트 코드 컴파일 및 배포를 위해 truffle을 설치해야 합니다.
 
@@ -36,12 +36,12 @@ git clone https://github.com/HanBae/HeVote
 npm install -g truffle
 ```
 
-- **Helib**
+### HElib
 
 truffle을 설치하는 동안, HElib을 설치해주세요(시간이 오래 걸릴 수 있습니다).
 
 1. HElib의 [INSTALL.txt](https://github.com/shaih/HElib/blob/master/INSTALL.txt)를 참조하여 GMP와 NTL의 설치를 진행하세요.
-2. (★**중요!**)GMP와 NTL의 설치 및 `make`가 모두 끝나면, HElib를 clone하여 HeVote의 `app/hec/HElib` 안에 넣어주세요.
+2. (★**중요!**)GMP와 NTL의 설치와 HElib의 `make`가 모두 끝나면, HElib 디렉토리를 HeVote의 `app/hec/HElib` 안에 넣어주세요.
    다음 명령어를 입력해주시면 됩니다.
 ```
 git clone https://github.com/shaih/HElib
@@ -57,7 +57,7 @@ make all
 > 컴파일할 때 항상 해당 경로의 라이브러리(`.a`)를 사용합니다!
 
 
-- **dependency**
+### dependency
 
 마지막으로, `package.json`의 의존성 설치를 해주시면 됩니다.
 

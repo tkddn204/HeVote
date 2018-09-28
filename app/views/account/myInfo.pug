@@ -11,16 +11,16 @@ block content
             h2 사용하고 계신 계정의 주소
             p.text-center #{user.etherAccount}
             hr(style='margin: 40px 40px 20px')
-            h4 내가 참여한 투표 목록
+            h4 내가 참여한 선거 목록
             if(votingElections)
                 .list-group
                     each val in votingElections
                         +voteItem(val.address, val.finite)
             else
-                p.text-center(style='color: gray') 아직 참여하신 투표가 없습니다.
+                p.text-center(style='color: gray') 아직 참여하신 선거가 없습니다.
             hr(style='margin: 40px 40px 20px')
             if(deployedElections)
-                h4 주최 투표 목록
+                h4 주최 선거 목록
                 .list-group
                     each val in deployedElections
                         +voteItem(val.address, val.finite)
