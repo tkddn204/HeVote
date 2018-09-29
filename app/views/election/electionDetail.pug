@@ -63,8 +63,8 @@ block content
                     .text-center
                         -electionInPath = path + '/vote'
                         -electionButtonDisabled = electionDetail.summary.electionState !== "진행 중"
-                        button.btn.btn-primary.btn-lg(
-                            onclick=`window.location='${electionInPath}';`
+                        button#participateVote.btn.btn-primary.btn-lg(
+                            data=electionInPath
                             disabled=electionButtonDisabled
                         ) 투표참여
                 else
