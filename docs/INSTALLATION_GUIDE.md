@@ -38,7 +38,7 @@ git clone https://github.com/HanBae/HeVote
 스마트 컨트렉트 코드 컴파일 및 배포를 위해 truffle을 설치해야 합니다.
 
 ```
-npm install -g truffle
+sudo npm install -g truffle
 ```
 
 ### HElib
