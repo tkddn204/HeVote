@@ -22,8 +22,6 @@ const updateUserDeploy = async (user) => {
     })
 };
 
-const password = 'asdf1234';
-
 // DB 변경
 Account.findOne({
     'username': 'region@election.com'
@@ -32,20 +30,7 @@ Account.findOne({
         return console.log(err.message);
     }
     if(result === undefined) {
-
-        // 계정을 만듦
-        const ethAccount = await accountApi.makeNewAccount(password);
-
-        Account.register(new Account(
-            {
-                username: 'region@eleciton.com',
-                etherAccount: ethAccount.address
-            }), password, (err, account) => {
-            if (err) {
-                return console.error(err);
-            }
-            return updateUserDeploy(account);
-        });
+        return console.log("계정을 만들어주세요!");
     } else {
         return updateUserDeploy(result);
     }
