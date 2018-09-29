@@ -1,3 +1,6 @@
+// author: mjhea0<michael@mherman.org>, Hyein<hyeinu65@gmail.com>
+// modified by: SsangWoo<tkddn204@gmail.com>
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
