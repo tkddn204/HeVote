@@ -43,8 +43,8 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 ## Installation
 [Installation Guide](https://github.com/HanBae/HeVote/blob/master/docs/INSTALLATION_GUIDE.md)를 참고하세요.
 
-## Get Started
-[Get Started](https://github.com/HanBae/HeVote/blob/master/docs/GET_STARTED.md)를 참고하세요.
+## Getting Started
+[Getting Started](https://github.com/HanBae/HeVote/blob/master/docs/GETTING_STARTED.md)를 참고하세요.
 
 ## Demo
 (youtube 동영상 추가 예정)
