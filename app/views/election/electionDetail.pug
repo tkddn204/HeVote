@@ -81,7 +81,7 @@ block content
                     aria-expanded="false"
                     aria-controls="modifyForm") 선거 정보 수정하기
                 #modifyForm.collapse(style='margin: 30px;')
-                    form(role='form', action=path, method="post", style='max-width: 300px;')
+                    form#stateChangeForm(role='form', action=path, method="post", style='max-width: 300px;')
                         .form-group
                             label(for='electionState') 선거 상태 변경
                             #electionState.btn-group.btn-group-toggle(data-toggle='buttons')
@@ -97,10 +97,10 @@ block content
                                 label.btn.btn-danger
                                     input#option4(type='radio', name='electionState', value='3' autocomplete='off')
                                     |  종료
-                        button.btn.btn-default(type='submit') 바꾸기
+                        button#stateChangeButton.btn.btn-default(type='submit') 바꾸기
                     br
                     br
-                    form(role='form', action=path+'/modify', method="post", style='max-width: 300px;')
+                    form#infoChangeForm(role='form', action=path+'/modify', method="post", style='max-width: 300px;')
                         fieldset(disabled)
                             .form-group
                                 label(for='electionName') 선거 제목(변경 불가)
@@ -115,7 +115,7 @@ block content
                                 br
                                 label(for='endDateTime') 선거 종료 날짜
                                 input#endDateTime(type='datetime-local' name='endDate' value=electionDetail.summary.endDate)
-                        button.btn.btn-default(type='submit') 선거 정보 변경
+                        button#infoChangeButton.btn.btn-default(type='submit') 선거 정보 변경
             // 공약보기 Modal 창
             #commitmentModal.modal.fade(
                 tabindex='-1',

@@ -12,12 +12,18 @@ $(document).ready(() => {
     $(".btn[type='submit']").click((event) => {
         const loadingText = "변경 중입니다...";
         changeTextWhileLoading(event, loadingText);
+        if($(event.target).attr("id") === "stateChangeButton") {
+            $('#stateChangeForm').submit();
+        } else if ($(event.target).attr("id") === "infoChangeButton") {
+            $('#infoChangeForm').submit();
+        }
     });
 
     $("#participateVote").click((event) => {
         const loadingText = "잠시만 기다려주세요...";
         changeTextWhileLoading(event, loadingText);
 
+        const $this = $(event.target);
         window.location.replace($this.attr('data'));
     });
 
