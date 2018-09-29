@@ -30,25 +30,23 @@ Account.findOne({
     'username': 'region@election.com'
 }, async (err, result) => {
     if (err) {
-        console.log(err);
-        if(result === undefined) {
+        return console.log(err.message);
+    }
+    if(result === undefined) {
 
-            // 계정을 만듦
-            const ethAccount = await accountApi.makeNewAccount(password);
+        // 계정을 만듦
+        const ethAccount = await accountApi.makeNewAccount(password);
 
-            Account.register(new Account(
-                {
-                    username: 'region@eleciton.com',
-                    etherAccount: ethAccount.address
-                }), password, (err, account) => {
-                if (err) {
-                    return console.error(err);
-                }
-                return updateUserDeploy(account);
-            });
-        } else {
-            return console.log(err.message);
-        }
+        Account.register(new Account(
+            {
+                username: 'region@eleciton.com',
+                etherAccount: ethAccount.address
+            }), password, (err, account) => {
+            if (err) {
+                return console.error(err);
+            }
+            return updateUserDeploy(account);
+        });
     } else {
         return updateUserDeploy(result);
     }
