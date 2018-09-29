@@ -50,6 +50,6 @@ Account.findOne({
             return console.log(err.message);
         }
     } else {
-        return updateUserDeploy(user);
+        return updateUserDeploy(result);
     }
 });
