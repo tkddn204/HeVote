@@ -4,6 +4,11 @@
 
 - [Ubuntu](https://www.ubuntu.com/) 16.04 / 18.04 LTS (64-bit)
 
+또한, 고사양의 하드웨어를 사용하는 것을 추천합니다.
+
+- RAM 4GB 이상 권장
+- SSD 20GB 이상 권장
+
 ## Requirements
 HeVote의 서버를 구동하기 위해서는 다음과 같은 구성요소가 필요합니다.
 - [NodeJS / npm](https://nodejs.org/ko/)
