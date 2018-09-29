@@ -27,7 +27,7 @@ require('./config/routes')(app, passport);
 const server = http.createServer(app);
 
 // MongoDB에 접속 후 서버 열기
-mongoose.connect(config.db);
+mongoose.connect(config.db, { useNewUrlParser: true });
 mongoose.connection
     .on('error', console.error)
     .on('open', listen);

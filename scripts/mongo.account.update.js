@@ -5,10 +5,9 @@ const Account = require('../app/models/account');
 const config = require('../config');
 const contractAddress = require('../config/contract-address.json');
 
-mongoose.connect(config.db, err => {
-    if(err) console.error(err.message);
-    else console.log("mongoDB connected.")
-});
+mongoose.connect(config.db, { useNewUrlParser: true })
+    .then(() => console.log("mongoDB connected."))
+    .catch(err => console.error(err.message));
 
 const updateUserDeploy = async (user) => {
     user.etherAccount = contractAddress['test_region_address'];
