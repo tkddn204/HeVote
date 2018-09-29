@@ -23,11 +23,12 @@ module.exports = (deployer, network, accounts) =>
         const deployedPublicElections = await deployedElectionFactory.getDeployedElections.call(false);
         console.log('지방선거 : ' + deployedPublicElections[0]);
 
+        const deployedRegionElection = await Election.at(deployedPublicElections[0]);
+
         // 지방선거 상태를 진행 중으로 변경
-        await deployedElectionFactory.setElectionState(1, {from: accounts[1]});
+        await deployedRegionElection.setElectionState(1, {from: accounts[1]});
 
         // 지방선거 투표에 후보자 추가
-        const deployedRegionElection = await Election.at(deployedPublicElections[0]);
         const regionCandidateList = ['Hong Gil-Dong','Kim Young-Hee','Park Cheol-soo','Go gil-dong']; //['홍길동', '김영희', '박철수', '고길동'];
         const regionCandidateCommitment = [
             'I will do my best for the citizens!',
