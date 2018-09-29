@@ -50,19 +50,30 @@ int main(int argc, char *argv[]) {
     // files name vector list
     vector<string> fileNames = vector<string>();
 
+    // make resultFile
+    const string resultFilePath = directoryPath + "/result/" + owner + ".txt";
+    ofstream resultFile(resultFilePath.c_str(), ios::binary);
+    assert(resultFile.is_open());
+
     // get Ctxt files
     getdir(directoryPathWithCtxt, fileNames);
     const long sizeOfCtxtFile = fileNames.size();
+    if(sizeOfCtxtFile == 0) {
+        string res = "[";
+        for (int i = 0; i < n; i++) {
+            res.append(to_string(i))
+            if(i != n-1) res.append(",");
+        }
+        res.append("]");
+
+        resultFile << res;
+        return 0;
+    }
 
     // get public key
     const string secretKeyBinaryFilePath = directoryPath + "/secretKey/" + owner + ".bin";
     ifstream secretBinFile(secretKeyBinaryFilePath.c_str(), ios::binary);
     assert(secretBinFile.is_open());
-
-    // set resultFile
-    const string resultFilePath = directoryPath + "/result/" + owner + ".txt";
-    ofstream resultFile(resultFilePath.c_str(), ios::binary);
-    assert(resultFile.is_open());
 
     // make stream of Ctxt Files
     fstream CtxtFiles[sizeOfCtxtFile];
@@ -93,7 +104,7 @@ int main(int argc, char *argv[]) {
 
     // ready to add two Ctxts
     // get Ctxt to file
-    Ctxt resultCtxt(*pubKey), secondCtxt(*pubKey), tempCtxt(*pubKey);
+    Ctxt resultCtxt(*pubKey), tempCtxt(*pubKey), fillCtxt(*pubKey);
 
     // fill 1 to tempCtxt
     Vec <ZZ> tempPoly;
@@ -101,17 +112,20 @@ int main(int argc, char *argv[]) {
 
     // set poly
     for (long i = 0; i < numberOfCandidates; i++) tempPoly[i] = 1;
-
     // encrypt poly
-    pubKey->Encrypt(tempCtxt, to_ZZX(tempPoly));
+    pubKey->Encrypt(fillCtxt, to_ZZX(tempPoly));
 
 
-    // add files
+    // add CypherTexts(for fill 1)
     CtxtFiles[0] >> resultCtxt;
-    resultCtxt += tempCtxt;
+
+    // fill 1
+    resultCtxt += fillCtxt;
+
+    // read files and add CypherTexts
     for (long i = 1; i < sizeOfCtxtFile; i++) {
-        CtxtFiles[i] >> secondCtxt;
-        resultCtxt += secondCtxt;
+        CtxtFiles[i] >> tempCtxt;
+        resultCtxt += tempCtxt;
     }
 
     // save result

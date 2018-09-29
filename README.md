@@ -62,5 +62,4 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 
 ## License
 HeVote는 [MIT License](https://github.com/HanBae/HeVote/blob/master/LICENSE) 하에 관리됩니다.
-- [MIT License](https://github.com/HanBae/HeVote/blob/master/LICENSE)
-- HElib: [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+- HElib: [Apache License 2.0](https://github.com/shaih/HElib/blob/master/LICENSE)

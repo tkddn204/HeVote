@@ -9,6 +9,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License. See accompanying LICENSE file.
+#
+# Modified by SsangWoo, for HeVote.
+#
+
 
 CC = g++
 
@@ -37,8 +41,6 @@ SRC_DIR = ./src
 BIN_DIR = ./bin
 
 fhe.a = $(HELIB_DIR)/fhe.a
-
-# ref: https://stackoverflow.com/a/4320498
 
 # ref: https://stackoverflow.com/a/7005912
 BINARYS = $(BIN_DIR)/createKeys $(BIN_DIR)/encryptCandidateList $(BIN_DIR)/tally
