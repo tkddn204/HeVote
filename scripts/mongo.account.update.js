@@ -10,40 +10,46 @@ mongoose.connect(config.db, err => {
     else console.log("mongoDB connected.")
 });
 
+const updateUserDeploy = async (user) => {
+    user.etherAccount = contractAddress['test_region_address'];
+    user.deployElections = [{
+        address: contractAddress['test_region_contract'],
+        finite: false
+    }];
+    return await user.save((err) => {
+        if (err) return console.log(err.message);
+        console.info("지방선거 완료");
+        process.exit();
+    })
+};
+
+const password = 'asdf1234';
+
 // DB 변경
 Account.findOne({
     'username': 'region@election.com'
 }, async (err, result) => {
-    let user = result;
     if (err) {
         console.log(err);
-        if(user === undefined) {
+        if(result === undefined) {
 
             // 계정을 만듦
-            const ethAccount = await accountApi.makeNewAccount("asdf1234");
+            const ethAccount = await accountApi.makeNewAccount(password);
 
             Account.register(new Account(
                 {
                     username: 'region@eleciton.com',
                     etherAccount: ethAccount.address
                 }), password, (err, account) => {
-                    if (err) {
-                        return console.error(err);
-                    }
-                user = account;
+                if (err) {
+                    return console.error(err);
+                }
+                return updateUserDeploy(account);
             });
         } else {
             return console.log(err.message);
         }
+    } else {
+        return updateUserDeploy(user);
     }
-    user.etherAccount = contractAddress['test_region_address'];
-    user.deployElections = [{
-        address: contractAddress['test_region_contract'],
-        finite: false
-    }];
-    await user.save((err) => {
-        if (err) return console.log(err.message);
-        console.info("지방선거 완료");
-        process.exit();
-    })
 });
