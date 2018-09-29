@@ -47,7 +47,7 @@ module.exports = (deployer, network, accounts) =>
             );
         }
 
-        // 파일에 저장
+        // config/contract-address.json에 저장
         await fs.open(`${config.root}/config/contract-address.json`, 'w', (err, fd) => {
             if (err) throw 'error opening file: ' + err;
             const jsonObj = {
@@ -62,6 +62,8 @@ module.exports = (deployer, network, accounts) =>
                 });
         });
 
+        // data 디렉토리 생성
+        Hec.makeDataDirectory();
         // hec으로 공개키를 저장합니다.
         await Hec.createKeys(deployedPublicElections[0], 10007, 7, 'data', async () => {
             const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";

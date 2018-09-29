@@ -77,11 +77,11 @@ int main(int argc, char *argv[]) {
     readContextBinary(secretBinFile, *context);
 
     // Read in SecKey and PubKey.
-    // Got to insert pubKey into seckey obj first.
+    // Got to insert pubKey into secKey obj first.
     std::unique_ptr <FHESecKey> secKey(new FHESecKey(*context));
     FHEPubKey *pubKey = (FHEPubKey *) secKey.get();
 
-    // read publicKey
+    // read publicKey & secretKey
     readPubKeyBinary(secretBinFile, *pubKey);
     readSecKeyBinary(secretBinFile, *secKey);
 

@@ -5,13 +5,13 @@ const config = require('../../config');
 class Hec {
 
     /**
-     * @private data 디렉토리 메소드
+     * data 디렉토리 체크 및 생성 메소드
      *
      * data 디렉토리와 그 폴더 안의 publicKey, secretKey, candidate, result 디렉토리가 있는지 없는지 검사한 후
      * 없으면 디렉토리를 생성함
      *
      */
-    static _makeDataDirectory() {
+    static makeDataDirectory() {
         const root = config.root;
         const dataDirectoryPath = `${root}/data`;
         if (fs.existsSync(dataDirectoryPath)) return;
@@ -39,7 +39,6 @@ class Hec {
      * @param {function} cb exec 처리가 끝난 후의 콜백 함수
      */
     static async createKeys(o, p = 13, L = 3, dir, cb) {
-        this._makeDataDirectory();
         const command = `${config.root}/app/hec/bin/createKeys o=${o} p=${p} L=${L} dir=${dir}`;
         console.debug(command);
 
