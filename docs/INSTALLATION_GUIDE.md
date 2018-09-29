@@ -27,7 +27,7 @@ HeVote의 서버를 구동하기 위해서는 다음과 같은 구성요소가 �
 
 ### clone
 
-우선, HeVote의 Git Repository를 Clone하셔야 합니다. 설치를 원하시는 폴더에 Clone하시면 됩니다.
+우선, HeVote의 github 저장소를 clone합니다.
 
 ```
 git clone https://github.com/HanBae/HeVote
@@ -46,20 +46,48 @@ sudo npm install -g truffle
 truffle을 설치하는 동안, HElib을 설치해주세요(시간이 오래 걸릴 수 있습니다).
 
 1. HElib의 [INSTALL.txt](https://github.com/shaih/HElib/blob/master/INSTALL.txt)를 참조하여 GMP와 NTL의 설치를 진행하세요.
-2. (★**중요!**)GMP와 NTL의 설치와 HElib의 `make`가 모두 끝나면, HElib 디렉토리를 HeVote의 `app/hec/HElib` 안에 넣어주세요.
-   다음 명령어를 입력해주시면 됩니다.
+    - GMP를 설치하는 데 어려움이 발생하면, 다음 명령어로 설치하세요. gmp 6.1.2 버전을 사용합니다.
+    ```
+    wget https://gmplib.org/download/gmp/gmp-6.1.2.tar.lz
+    sudo apt install lunzip m4
+    lunzip gmp-6.1.2.tar.lz
+    tar -xvf gmp-6.1.2.tar
+    cd gmp-6.1.2
+    ./configure
+    make
+    make check
+    sudo make install
+    ```
+    - NTL을 설치하는 데 어려움이 발생하면, 다음 명령어로 설치하세요. NTL 11.2.1 버전을 사용합니다.
+    ```
+    wget http://www.shoup.net/ntl/ntl-11.2.1.tar.gz
+    sudo apt-get install libntl-dev
+    tar -xvf ntl-11.2.1.tar.gz
+    cd ntl-11.2.1/src
+    ./configure NTL_GMP_LIP=on
+    make
+    make check
+    sudo make install
+    ```
+2. (★**중요!**) 다음 명령어로 HElib을 clone하고, HElib 디렉토리를 HeVote의 `HeVote/app/hec` 안에 넣어주세요. 
 ```
 git clone https://github.com/shaih/HElib
 mv HElib HeVote/app/hec/HElib
-cd HeVote/app/hec
+cd HeVote/app/hec/HElib/src
+make
+make check
+```
+3. 마지막으로 다음 명령어를 실행하여 컴파일을 진행하면 됩니다.
+```
+cd ../..
+mkdir bin
 make all
 ```
 
 > ※ **Caution!**
 >
-> `/usr/local` 안에 GMP와 NTL이 잘 설치되었는지 확인해주세요!
->
-> 컴파일할 때 항상 해당 경로의 라이브러리(`.a`)를 사용합니다!
+> `/usr/local/include` 안에 GMP와 NTL이 잘 설치되었는지 확인해주세요!
+> 동형암호를 사용할 때 항상 `/usr/local/include` 경로 안의 라이브러리를 사용합니다!
 
 
 ### dependency
