@@ -30,7 +30,7 @@ Account.findOne({
         return console.log(err.message);
     }
     if(result === undefined) {
-        return console.log("계정을 만들어주세요!");
+        return console.log("region@election.com 으로 회원가입해주세요!");
     } else {
         return updateUserDeploy(result);
     }
