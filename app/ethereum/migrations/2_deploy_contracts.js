@@ -11,12 +11,12 @@ module.exports = (deployer, network, accounts) =>
         const deployedElectionFactory = await ElectionFactory.deployed();
 
         await deployedElectionFactory.makeNewElection(
-            // '대전 지방선거'
-            'Daejeon Mayoral Election',
-            // '이번 선거에서 선출된 공직자의 임기는 4년(2018. 7. 1.~2022. 6. 30.)이며, 재보궐선거의 경우 전임자의 잔여임기(~2020. 5. 29.)까지 업무를 수행하게 된다.',
-            'The Daejeon Mayoral Election is an election of the Republic of Korea to elect mayor of Daejeon.',
+            '대전 지방선거',
+            // 'Daejeon Mayoral Election',
+            '이번 선거에서 선출된 공직자의 임기는 4년이며, 재보궐선거의 경우 전임자의 잔여임기까지 업무를 수행하게 된다.',
+            // 'The Daejeon Mayoral Election is an election of the Republic of Korea to elect mayor of Daejeon.',
             accounts[1],
-            timeUtil.dateStringToTimestamp('09/10/2018 06:00:00'),
+            timeUtil.dateStringToTimestamp('09/30/2018 06:00:00'),
             timeUtil.dateStringToTimestamp('10/10/2018 18:00:00'),
             false);
 
@@ -29,16 +29,16 @@ module.exports = (deployer, network, accounts) =>
         await deployedRegionElection.setElectionState(1, {from: accounts[1]});
 
         // 지방선거 투표에 후보자 추가
-        const regionCandidateList = ['Hong Gil-Dong','Kim Young-Hee','Park Cheol-soo','Go gil-dong']; //['홍길동', '김영희', '박철수', '고길동'];
+        const regionCandidateList = ['홍길동', '김영희', '박철수', '고길동']; //['Hong Gil-Dong','Kim Young-Hee','Park Cheol-soo','Go gil-dong'];
         const regionCandidateCommitment = [
-            'I will do my best for the citizens!',
-            'I will do the right politics!',
-            'I will move forward for a bright society!',
-            'I will act for economic development!'
-            // '시민을 위해 노력하겠습니다!',
-            // '올바른 정치를 하겠습니다!',
-            // '밝은 사회를 위해 전진하겠습니다!',
-            // '경제 발전을 위해 행동하겠습니다!'
+            // 'I will do my best for the citizens!',
+            // 'I will do the right politics!',
+            // 'I will move forward for a bright society!',
+            // 'I will act for economic development!'
+            '시민을 위해 노력하겠습니다!',
+            '올바른 정치를 하겠습니다!',
+            '밝은 사회를 위해 전진하겠습니다!',
+            '경제 발전을 위해 행동하겠습니다!'
         ];
         for (let i = 0; i < regionCandidateList.length; i++) {
             await deployedRegionElection.addCandidate(
