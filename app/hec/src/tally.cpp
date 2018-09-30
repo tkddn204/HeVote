@@ -60,9 +60,9 @@ int main(int argc, char *argv[]) {
     const long sizeOfCtxtFile = fileNames.size();
     if(sizeOfCtxtFile == 0) {
         string res = "[";
-        for (int i = 0; i < number; i++) {
+        for (int i = 0; i < numberOfCandidates; i++) {
             res.append(to_string(i));
-            if(i != n-1) res.append(",");
+            if(i != numberOfCandidates-1) res.append(",");
         }
         res.append("]");
 
