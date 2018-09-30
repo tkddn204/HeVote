@@ -3,8 +3,6 @@
 
 HeVote는 동형암호를 사용한 이더리움 & IPFS 기반 전자투표 시스템(ÐApp)입니다.
 
-(GIF 추가 예정)
-
 ## Introduction
 HeVote는 전자투표의 개설부터 투표, 집계까지 할 수 있습니다.
 [이더리움](https://www.ethereum.org/)과 [IPFS](https://ipfs.io/), 두 블록체인을 사용하여 투표 내역을 적은 비용으로 안전하게 저장할 수 있으며,
