@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <errno.h>
+#include <cstring>
 
 #include <NTL/ZZX.h>
 #include <NTL/vector.h>
@@ -50,11 +51,6 @@ int main(int argc, char *argv[]) {
     // files name vector list
     vector<string> fileNames = vector<string>();
 
-    // make resultFile
-    const string resultFilePath = directoryPath + "/result/" + owner + ".txt";
-    ofstream resultFile(resultFilePath.c_str(), ios::binary);
-    assert(resultFile.is_open());
-
     // get Ctxt files
     getdir(directoryPathWithCtxt, fileNames);
     const long sizeOfCtxtFile = fileNames.size();
@@ -75,6 +71,11 @@ int main(int argc, char *argv[]) {
     ifstream secretBinFile(secretKeyBinaryFilePath.c_str(), ios::binary);
     assert(secretBinFile.is_open());
 
+    // set resultFile
+    const string resultFilePath = directoryPath + "/result/" + owner + ".txt";
+    ofstream resultFile(resultFilePath.c_str(), ios::binary);
+    assert(resultFile.is_open());
+
     // make stream of Ctxt Files
     fstream CtxtFiles[sizeOfCtxtFile];
     for (long i = 0;i < sizeOfCtxtFile;i++) {
@@ -88,11 +89,11 @@ int main(int argc, char *argv[]) {
     readContextBinary(secretBinFile, *context);
 
     // Read in SecKey and PubKey.
-    // Got to insert pubKey into secKey obj first.
+    // Got to insert pubKey into seckey obj first.
     std::unique_ptr <FHESecKey> secKey(new FHESecKey(*context));
     FHEPubKey *pubKey = (FHEPubKey *) secKey.get();
 
-    // read publicKey & secretKey
+    // read publicKey
     readPubKeyBinary(secretBinFile, *pubKey);
     readSecKeyBinary(secretBinFile, *secKey);
 
@@ -104,7 +105,7 @@ int main(int argc, char *argv[]) {
 
     // ready to add two Ctxts
     // get Ctxt to file
-    Ctxt resultCtxt(*pubKey), tempCtxt(*pubKey), fillCtxt(*pubKey);
+    Ctxt resultCtxt(*pubKey), secondCtxt(*pubKey), tempCtxt(*pubKey);
 
     // fill 1 to tempCtxt
     Vec <ZZ> tempPoly;
@@ -112,25 +113,53 @@ int main(int argc, char *argv[]) {
 
     // set poly
     for (long i = 0; i < numberOfCandidates; i++) tempPoly[i] = 1;
+
     // encrypt poly
-    pubKey->Encrypt(fillCtxt, to_ZZX(tempPoly));
+    pubKey->Encrypt(tempCtxt, to_ZZX(tempPoly));
+
+    // add files
+    ZZX tempCtxtZZX;
+    ostringstream cTxtStream;
 
 
-    // add CypherTexts(for fill 1)
     CtxtFiles[0] >> resultCtxt;
+    cTxtStream << resultCtxt;
+    secKey->Decrypt(tempCtxtZZX, resultCtxt);
 
-    // fill 1
-    resultCtxt += fillCtxt;
+    cout << "\n" << fileNames[0] << endl;
+    cout << "CypherText: " << cTxtStream.str().substr(0, 20)
+        << " ... " << cTxtStream.str().substr(cTxtStream.str().size() - 63, 50) << endl;
+    cout << "PlainText: " << tempCtxtZZX << endl;
+    cout << "\n+\n" << endl;
 
-    // read files and add CypherTexts
     for (long i = 1; i < sizeOfCtxtFile; i++) {
-        CtxtFiles[i] >> tempCtxt;
-        resultCtxt += tempCtxt;
+        CtxtFiles[i] >> secondCtxt;
+        resultCtxt += secondCtxt;
+        cTxtStream << secondCtxt;
+        secKey->Decrypt(tempCtxtZZX, secondCtxt);
+
+        cout << fileNames[i] << endl;
+        cout << "CypherText: " << cTxtStream.str().substr(0, 20)
+             << " ..." << cTxtStream.str().substr(cTxtStream.str().size() - 63, 50) << endl;
+        cout << "PlainText:" << tempCtxtZZX << endl;
+        if(i != sizeOfCtxtFile-1) cout << "\n+\n" << endl;
     }
+    cout << "\n=\n" << endl;
 
     // save result
     ZZX ptSum;
+    cTxtStream << resultCtxt;
     secKey->Decrypt(ptSum, resultCtxt);
-    cout << "result : " << ptSum << endl;
+
+    cout << " [ tally result ]" << endl;
+    cout << "CypherText: " << cTxtStream.str().substr(0, 20)
+         << " ..." << cTxtStream.str().substr(cTxtStream.str().size() - 63, 50) << endl;
+    cout << "PlainText: " << ptSum << endl;
+
+    // last elements +1
+    resultCtxt += tempCtxt;
+    secKey->Decrypt(ptSum, resultCtxt);
+
+    // save result to file
     resultFile << ptSum;
 }
