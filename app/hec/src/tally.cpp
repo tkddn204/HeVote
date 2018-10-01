@@ -51,6 +51,11 @@ int main(int argc, char *argv[]) {
     // files name vector list
     vector<string> fileNames = vector<string>();
 
+    // set resultFile
+    const string resultFilePath = directoryPath + "/result/" + owner + ".txt";
+    ofstream resultFile(resultFilePath.c_str(), ios::binary);
+    assert(resultFile.is_open());
+
     // get Ctxt files
     getdir(directoryPathWithCtxt, fileNames);
     const long sizeOfCtxtFile = fileNames.size();
@@ -70,11 +75,6 @@ int main(int argc, char *argv[]) {
     const string secretKeyBinaryFilePath = directoryPath + "/secretKey/" + owner + ".bin";
     ifstream secretBinFile(secretKeyBinaryFilePath.c_str(), ios::binary);
     assert(secretBinFile.is_open());
-
-    // set resultFile
-    const string resultFilePath = directoryPath + "/result/" + owner + ".txt";
-    ofstream resultFile(resultFilePath.c_str(), ios::binary);
-    assert(resultFile.is_open());
 
     // make stream of Ctxt Files
     fstream CtxtFiles[sizeOfCtxtFile];
