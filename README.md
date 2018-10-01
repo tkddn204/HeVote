@@ -45,7 +45,9 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 [Getting Started](https://github.com/HanBae/HeVote/blob/master/docs/GETTING_STARTED.md)를 참고하세요.
 
 ## Demo
-(youtube 동영상 추가 예정)
+[![HeVote 시연영상](https://i9.ytimg.com/vi/sa8Ox_76LMo/mq1.jpg?sqp=CJyOx90F&rs=AOn4CLBg56m7s9DHkxFDKL6_BeJNTYL0QA)](https://youtu.be/sa8Ox_76LMo)
+
+클릭하면 Youtube 시연영상으로 이동합니다.
 
 ## TODO
 [TODO List](https://github.com/HanBae/HeVote/blob/master/docs/TODO_LIST.md)에 향후 개발해야할 내역들을 포함하고 있습니다.
