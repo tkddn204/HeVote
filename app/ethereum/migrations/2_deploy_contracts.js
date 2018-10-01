@@ -66,7 +66,7 @@ module.exports = (deployer, network, accounts) =>
         // data 디렉토리 생성
         Hec.makeDataDirectory();
         // hec으로 공개키를 저장합니다.
-        await Hec.createKeys(deployedPublicElections[0], 10007, 7, 'data', async () => {
+        await Hec.createKeys(deployedPublicElections[0], 257, 8, 'data', async () => {
             const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";
             const fileSize = fs.statSync(publicKeyFilePath).size;
             if (fileSize > 0) {
