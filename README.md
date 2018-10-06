@@ -20,7 +20,9 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 
 ## Architecture
 
-![architecture](https://github.com/HanBae/HeVote/blob/master/docs/images/architecture.png){:height="50%" width="50%"}
+<p align="center">
+  <img src="https://github.com/HanBae/HeVote/blob/master/docs/images/architecture.png" width="70%" height="70%" />
+</p>
 
 ÐApp 서버를 중심으로 이더리움, IPFS, MongoDB와 정보를 주고받으면서 사용자에게 전자투표 서비스를 제공합니다.
 
@@ -55,7 +57,9 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 
 ## Demo
 
-[![HeVote 시연영상](https://github.com/HanBae/HeVote/blob/master/docs/images/youtube-thumbnail.jpg){:height="50%" width="50%"}](https://youtu.be/ZopzjAk5yak)
+<p align="center">
+  <img src="https://github.com/HanBae/HeVote/blob/master/docs/images/youtube-thumbnail.jpg" width="50%" height="50%" />
+</p>
 
 클릭하면 Youtube 시연영상으로 이동합니다.
 
