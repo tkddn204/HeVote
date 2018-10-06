@@ -103,5 +103,10 @@ make all
 npm install
 ```
 
+## Getting Started
+축하드립니다! 설치를 모두 마치셨습니다.
+
+이제 [Getting started](https://github.com/HanBae/HeVote/blob/master/docs/GETTING_STARTED.md)로 가셔서 HeVote를 한번 사용해 보세요.
+
 혹시 설치 중에 문제가 발생하시면, 언제든지 제 [메일](mailto:tkddn204@gmail.com?subject=[HeVote]%20설치%20문제)
 또는 [Issue](https://github.com/HanBae/HeVote/issues/new)에 질문을 남겨주세요!
