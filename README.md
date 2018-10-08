@@ -58,8 +58,10 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 ## Demo
 
 <p align="center">
-  <img src="https://github.com/HanBae/HeVote/blob/master/docs/images/youtube-thumbnail.jpg" width="50%" height="50%" />
+    <img src="https://github.com/HanBae/HeVote/blob/master/docs/images/youtube-thumbnail.jpg" width="50%" height="50%" />
 </p>
+
+[![HeVote 시연영상](https://github.com/HanBae/HeVote/blob/master/docs/images/youtube-thumbnail.jpg)](https://www.youtube.com/watch?v=ZopzjAk5yak)
 
 클릭하면 Youtube 시연영상으로 이동합니다.
 
