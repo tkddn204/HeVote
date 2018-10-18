@@ -70,8 +70,8 @@ exports.myInfo = async (req, res) => {
     } else {
         votingElectionsSummaryList = [];
     }
-    if (user.deployElections) {
-        if (user.deployElections.length) {
+    if (user.deployedElections) {
+        if (user.deployedElections.length) {
             deployedElectionsSummaryList = await electionApi.getElectionSummaryList({
                 electionList: req.user.deployedElections
             });

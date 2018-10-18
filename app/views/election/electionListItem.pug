@@ -1,6 +1,7 @@
-mixin voteItem(election, isFinite)
+mixin voteItem(election)
     if(election)
-        -voteHref='/' + isFinite + '/' + election.electionAddress
+        -isFinite = election.finiteElection ? "finite": "public"
+        -voteHref=`/${isFinite}/${election.electionAddress}`
         a.list-group-item.list-group-item-action.flex-column.align-items-start(
         href=voteHref
         )

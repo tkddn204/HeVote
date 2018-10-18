@@ -14,16 +14,16 @@ block content
             h4 내가 참여한 선거 목록
             if(votingElections)
                 .list-group
-                    each val in votingElections
-                        +voteItem(val.address, val.finite)
+                    each election in votingElections
+                        +voteItem(election)
             else
                 p.text-center(style='color: gray') 아직 참여하신 선거가 없습니다.
             hr(style='margin: 40px 40px 20px')
             if(deployedElections)
                 h4 주최 선거 목록
                 .list-group
-                    each val in deployedElections
-                        +voteItem(val.address, val.finite)
+                    each election in deployedElections
+                        +voteItem(election)
 
             -createBtnText= isAdmin ? "선거 개설" : "선거 개설 신청"
             a.btn.btn-primary.btn-lg(style='margin: 30px')(

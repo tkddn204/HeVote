@@ -93,7 +93,6 @@ exports.vote = async (electionAddress, voterAddress, candidateHash) => {
 
 exports.getElectionSummaryList = async (opts) => {
     let electionAddressList;
-
     if(opts.isFinite !== undefined) {
         // 보통 목록을 불러올 때
         const isFiniteElection = opts.isFinite;
