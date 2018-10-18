@@ -2,20 +2,22 @@
 
 [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/HanBae/HeVote/blob/master/LICENSE)
 
-HeVote는 동형암호를 사용한 이더리움 & IPFS 기반 전자투표 시스템(ÐApp)입니다.
+HeVote는 동형암호를 사용한 이더리움 기반 전자투표 시스템(ÐApp)입니다.
 
 ## Introduction
 
 HeVote는 전자투표의 개설부터 투표, 집계까지 할 수 있습니다.
-[이더리움](https://www.ethereum.org/)과 [IPFS](https://ipfs.io/), 두 블록체인을 사용하여 투표 내역을 적은 비용으로 안전하게 저장할 수 있으며,
+[이더리움](https://www.ethereum.org/)의 블록체인을 사용하여 투표 내역을 적은 비용으로 안전하게 저장합니다.
 동형암호 라이브러리인 [HElib](https://github.com/shaih/HElib)으로 사용자가 투표한 내역을 암호화하고,
 암호화된 상태에서도 투표 집계를 가능케 하여 비밀선거의 원칙을 지키도록 했습니다.
+[IPFS](https://ipfs.io/) 프로토콜을 사용하여 이더리움 트랜잭션의 비용을 줄이고, 동형암호 파일을 탈중앙화하여 저장합니다.
 Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리하게 전자투표 서비스를 제공할 수 있습니다.
 
 ## Advantage
 
-- 이더리움과 IPFS: 안전하게 투표 내역을 저장
+- 이더리움: 안전하게 투표 내역을 저장
 - 동형암호: 투표 내역을 암호화하여 저장하므로 해킹에 안전
+- IPFS: 이더리움 트랜잭션 비용 감소
 - 웹: 사용자에게 쉽고 간단한 투표 서비스를 제공
 
 ## Architecture
@@ -31,7 +33,7 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 - HElib: 차세대 동형암호 라이브러리로, 투표내역을 암호화 & 복호화합니다.
 - 이더리움: 선거 정보와 투표 내역을 저장합니다.
 - MongoDB: 사용자의 정보와 선거 개설 신청 정보를 저장합니다.
-- IPFS: 동형암호의 공개키나 암호문을 반영구적으로 블록체인에 저장합니다.
+- IPFS: 동형암호의 공개키나 암호문을 탈중앙화하여 저장합니다.
 
 ## Features
 
@@ -39,7 +41,7 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 
 - 이더리움 지갑(Metamask, Mist, ...) 없이 ÐApp 사용 가능
 - 동형암호를 통한 비밀 선거 보장
-- 동형암호 키와 암호문을 IPFS에 반영구 저장
+- 동형암호 공개키와 암호문을 IPFS에 저장
 - 누구나 투표할 수 있는 선거
 - 하나의 선거 당 하나의 스마트 컨트렉트
 - 쉽고 빠른 투표
@@ -72,8 +74,8 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 
 ## Contribute
 
-[New Issue](https://github.com/HanBae/HeVote/issues/new)로 기여해주시고,
-혹시 새로운 Branch로 기여해주신다면 **대단히** 감사하겠습니다.
+[New Issue](https://github.com/HanBae/HeVote/issues/new)로 문의해주시고,
+혹시 Pull Request 로 기여해주신다면 **대단히** 감사하겠습니다.
 
 ## License
 
