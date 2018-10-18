@@ -38,20 +38,26 @@ exports.getPublicKeyOfHe = async (electionAddress) =>
     await Election(electionAddress).methods.getPublicKeyOfHe().call();
 
 exports.getElectionSummary = async (electionAddress) => {
-    const rawSummary = await Election(electionAddress).methods.getElectionSummary().call();
-    const startDate = timeUtil.timestampToDate(rawSummary['3']);
-    const endDate = timeUtil.timestampToDate(rawSummary['4']);
-    return {
-        electionName: rawSummary['0'],
-        electionDescription: rawSummary['1'],
-        electionState: electionState[rawSummary['2']],
-        electionAddress: electionAddress,
-        startDate: startDate,
-        endDate: endDate,
-        showDate: `${startDate} - ${endDate}`,
-        ballotCount: rawSummary['5'],
-        finiteElection: rawSummary['6']
-    };
+    try {
+        const rawSummary = await Election(electionAddress).methods.getElectionSummary().call();
+        const startDate = timeUtil.timestampToDate(rawSummary['3']);
+        const endDate = timeUtil.timestampToDate(rawSummary['4']);
+        return {
+            electionName: rawSummary['0'],
+            electionDescription: rawSummary['1'],
+            electionState: electionState[rawSummary['2']],
+            electionAddress: electionAddress,
+            startDate: startDate,
+            endDate: endDate,
+            showDate: `${startDate} - ${endDate}`,
+            ballotCount: rawSummary['5'],
+            finiteElection: rawSummary['6']
+        };
+    } catch (e) {
+        return {
+            electionAddress: undefined
+        };
+    }
 };
 
 exports.setElectionDescription = async (electionAddress, ownerAddress, electionDescription) =>

@@ -11,7 +11,7 @@ mongoose.connect(config.db, { useNewUrlParser: true })
 
 const updateUserDeploy = async (user) => {
     user.etherAccount = contractAddress['test_region_address'];
-    user.deployElections = [{
+    user.deployedElections = [{
         address: contractAddress['test_region_contract'],
         finite: false
     }];

@@ -25,15 +25,9 @@ block content
                     each val in deployedElections
                         +voteItem(val.address, val.finite)
 
-            if(isAdmin)
-                a.btn.btn-danger.btn-lg(style='margin: 30px')(
-                href="/election/create"
-                role="button"
-                aria-pressed="true"
-                ) 선거 개설
-            else
-                a.btn.btn-primary.btn-lg(style='margin: 30px')(
-                href="/election/request"
-                role="button"
-                aria-pressed="true"
-                ) 선거 개설 신청
+            -createBtnText= isAdmin ? "선거 개설" : "선거 개설 신청"
+            a.btn.btn-primary.btn-lg(style='margin: 30px')(
+            href="/election/create"
+            role="button"
+            aria-pressed="true"
+            ) #{createBtnText}

@@ -11,7 +11,7 @@
 
 ## Requirements
 HeVote의 서버를 구동하기 위해서는 다음과 같은 구성요소가 필요합니다.
-- [NodeJS / npm](https://nodejs.org/ko/)
+- [NodeJS](https://nodejs.org/ko/)
     - 8 이상 버전을 권장합니다.
 - [ganache](https://truffleframework.com/ganache)([ganache-cli](https://github.com/trufflesuite/ganache-cli)) or [geth](https://github.com/ethereum/go-ethereum)(숙련자용)
     - **최신 버전**을 권장합니다.

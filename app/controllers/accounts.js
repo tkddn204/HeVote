@@ -59,30 +59,22 @@ exports.myInfo = async (req, res) => {
 
     const user = req.user;
 
-    let votingElectionsSummaryList;
-    let deployedElectionsSummaryList;
+    let votingElectionsSummaryList = [];
+    let deployedElectionsSummaryList = [];
     if (user.votingElections) {
         if (user.votingElections.length) {
-            try {
-                votingElectionsSummaryList = await electionApi.getElectionSummaryList({
-                    electionList: req.user.votingElections
-                });
-            } catch (e) {
-                votingElectionsSummaryList = [];
-            }
+            votingElectionsSummaryList = await electionApi.getElectionSummaryList({
+                electionList: req.user.votingElections
+            });
         }
     } else {
         votingElectionsSummaryList = [];
     }
     if (user.deployElections) {
         if (user.deployElections.length) {
-            try {
-                deployedElectionsSummaryList = await electionApi.getElectionSummaryList({
-                    electionList: req.user.deployedElections
-                });
-            } catch (e) {
-                deployedElectionsSummaryList = [];
-            }
+            deployedElectionsSummaryList = await electionApi.getElectionSummaryList({
+                electionList: req.user.deployedElections
+            });
         }
     } else {
         deployedElectionsSummaryList = [];
