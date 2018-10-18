@@ -15,7 +15,6 @@ const makeNewElection = async (adminAddress,
                            electionOwner,
                            startDate,
                            endDate,
-                           publicKeyOfHe,
                            finiteElection) =>
     await ElectionFactory.methods.makeNewElection(
         electionName,
@@ -23,7 +22,6 @@ const makeNewElection = async (adminAddress,
         electionOwner,
         startDate,
         endDate,
-        publicKeyOfHe,
         finiteElection
     ).send({from: adminAddress});
 

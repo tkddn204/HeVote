@@ -16,8 +16,8 @@ module.exports = (deployer, network, accounts) =>
             '이번 선거에서 선출된 공직자의 임기는 4년이며, 재보궐선거의 경우 전임자의 잔여임기까지 업무를 수행하게 된다.',
             // 'The Daejeon Mayoral Election is an election of the Republic of Korea to elect mayor of Daejeon.',
             accounts[1],
-            timeUtil.dateStringToTimestamp('09/30/2018 06:00:00'),
-            timeUtil.dateStringToTimestamp('10/10/2018 18:00:00'),
+            timeUtil.dateStringToTimestamp('10/10/2018 06:00:00'),
+            timeUtil.dateStringToTimestamp('10/30/2018 18:00:00'),
             false);
 
         const deployedPublicElections = await deployedElectionFactory.getDeployedElections.call(false);
@@ -52,6 +52,7 @@ module.exports = (deployer, network, accounts) =>
         await fs.open(`${config.root}/config/contract-address.json`, 'w', (err, fd) => {
             if (err) throw 'error opening file: ' + err;
             const jsonObj = {
+                admin_address: accounts[0],
                 factory: deployedElectionFactory.address,
                 test_region_contract: deployedPublicElections[0],
                 test_region_address: accounts[1]
