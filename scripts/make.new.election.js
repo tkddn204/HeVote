@@ -96,7 +96,9 @@ const makeNewElection = async (params) => {
         params.p, params.L);
     console.log("Create He's PublicKey");
 
-    await execSync(`node ${process.env.root}/scripts/ipfs.new.election.js ${electionAddress} ${params.electionOwner}`);
+    const command = `node ./scripts/ipfs.new.election.js ${electionAddress} ${params.electionOwner}`;
+    console.log(command);
+    await execSync(command);
     console.log("Save He's PublicKey To Contract And Save To IPFS!")
 };
 
