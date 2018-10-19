@@ -97,18 +97,16 @@ const makeNewElection = async (params) => {
     console.log("Create He's PublicKey");
 
     // ./election-address.json에 저장
-    await fs.open(`${config.root}/scripts/election-address.json`, 'w', (err, fd) => {
-        if (err) throw 'error opening file: ' + err;
-        const jsonObj = {
-            electionAddress: electionAddress,
-            ownerAddress: params.electionOwner
-        };
-        fs.writeFile(`${config.root}/scripts/election-address.json`,
-            new Buffer.from(JSON.stringify(jsonObj)), 'utf8', (err) => {
-                if (err) throw 'error writing file: ' + err;
-                fs.close(fd, () => console.log(JSON.stringify(jsonObj)));
-            });
-    });
+    const fd = await fs.openSync(`${config.root}/scripts/election-address.json`, 'w');
+    const jsonObj = {
+        electionAddress: electionAddress,
+        ownerAddress: params.electionOwner
+    };
+    fs.writeFileSync(`${config.root}/scripts/election-address.json`,
+        new Buffer.from(JSON.stringify(jsonObj)), 'utf8', (err) => {
+            if (err) throw 'error writing file: ' + err;
+            fs.close(fd, () => console.log(JSON.stringify(jsonObj)));
+        });
 };
 
 // Input Election's Information with ReadLine module.

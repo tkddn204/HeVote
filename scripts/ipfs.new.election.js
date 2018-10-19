@@ -1,8 +1,8 @@
 const ipfs = require('../app/ipfs/ipfs');
 const fs = require('fs');
 const electionApi = require('../app/ethereum/api/election.api');
-const electionInformation = require('./election-contract.json');
 const config = require('../config');
+const electionInformation = require(`${config.root}/scripts/election-contract.json`);
 
 const contractAddress = electionInformation.contractAddress;
 const ownerAddress = electionInformation.ownerAddress;
@@ -23,5 +23,5 @@ ipfs.files.add(buffer, async (err, res) => {
 
     console.log("ipfs-contract saved.");
 
-    fs.unlink("./election-contract.json");
+    fs.unlink(`${config.root}/scripts/election-contract.json`);
 });
