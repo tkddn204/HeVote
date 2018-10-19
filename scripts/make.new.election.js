@@ -5,8 +5,8 @@ const contractInformation = require('../config/contract-address.json');
 const timeUtil = require('../app/utils/time.util');
 
 const fs = require('fs');
+const config = require('../config');
 const readLine = require('readline');
-const execSync = require('child_process').execSync;
 const Hec = require('../app/hec/hec');
 
 const makeNewContract = async (
@@ -96,10 +96,19 @@ const makeNewElection = async (params) => {
         params.p, params.L);
     console.log("Create He's PublicKey");
 
-    const command = `node ./scripts/ipfs.new.election.js ${electionAddress} ${params.electionOwner}`;
-    console.log(command);
-    await execSync(command);
-    console.log("Save He's PublicKey To Contract And Save To IPFS!")
+    // ./election-address.json에 저장
+    await fs.open(`${config.root}/scripts/election-address.json`, 'w', (err, fd) => {
+        if (err) throw 'error opening file: ' + err;
+        const jsonObj = {
+            electionAddress: electionAddress,
+            ownerAddress: params.electionOwner
+        };
+        fs.writeFile(`${config.root}/scripts/election-address.json`,
+            new Buffer.from(JSON.stringify(jsonObj)), 'utf8', (err) => {
+                if (err) throw 'error writing file: ' + err;
+                fs.close(fd, () => console.log(JSON.stringify(jsonObj)));
+            });
+    });
 };
 
 // Input Election's Information with ReadLine module.
