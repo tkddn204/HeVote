@@ -2,12 +2,11 @@ const electionFactoryApi = require('../app/ethereum/api/election.factory.api');
 const electionApi = require('../app/ethereum/api/election.api');
 const candidateApi = require('../app/ethereum/api/candidate.api');
 const contractInformation = require('../config/contract-address.json');
+const ipfsNewElection = require('./ipfs.new.election');
 const timeUtil = require('../app/utils/time.util');
 
-const web3 = require('../app/ethereum/web3');
-const ipfs = require('../app/ipfs/ipfs');
 const fs = require('fs');
-const config = require('../config');
+const Hec = require('../app/hec/hec');
 
 const makeNewContract = async (
     electionName,
@@ -72,26 +71,6 @@ const createHePublicKey = async (
     });
 };
 
-const saveHePublicKeyOfIpfsHash = async (
-    electionAddress,
-    electionOwner
-) => {
-    const publicKeyFilePath = `${config.root}/data/publicKey/${electionAddress}.bin`;
-    const publicKeyFile = fs.readFileSync(publicKeyFilePath);
-    let buffer = new Buffer.from(publicKeyFile);
-
-    ipfs.files.add(buffer, async (err, res) => {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        const publicKeyFileHash = res[0].hash;
-        console.log(`publicKey Hash : ${publicKeyFileHash}`);
-        await electionApi.setPublicKeyOfHe(electionAddress, electionOwner, publicKeyFileHash);
-        console.log("ipfs-contract saved.");
-    });
-};
-
 const makeNewElection = async (params) => {
     const electionAddress = await makeNewContract(
         params.electionName,
@@ -100,7 +79,8 @@ const makeNewElection = async (params) => {
         params.startDate,
         params.endDate,
         params.finiteElection);
-    console.log("Contract Created! Address: ", electionAddress);
+    console.log("Contract Created! Contract Address:", electionAddress);
+
     await addCandidates(
         electionAddress,
         params.electionOwner,
@@ -108,12 +88,14 @@ const makeNewElection = async (params) => {
         params.candidateCommitmentList
     );
     console.log("Add Candidates Success.");
+
     await createHePublicKey(
         electionAddress,
         params.electionOwner,
         params.p, params.L);
     console.log("Create He's PublicKey");
-    await saveHePublicKeyOfIpfsHash(
+
+    await ipfsNewElection(
         electionAddress,
         params.electionOwner
     );
