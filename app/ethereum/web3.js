@@ -1,7 +1,7 @@
 const Web3 = require('web3');
-require('dotenv').config();
+const config = require('../../config');
+require('dotenv').config({path: `${config.root}/.env`});
 const env = process.env;
-
 let web3;
 if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
     // 브라우저를 실행했고 메타마스크가 실행 중!
@@ -11,7 +11,7 @@ if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
     // const provider = new Web3.providers.HttpProvider(
     //     'https://rinkeby.infura.io/rinkebyinfura1234'
     // );
-    const provider = `http://${env.GANACHE_URL}:${env.GANACHE_PORT}`;
+    const provider = `http://${env.ETHER_URL}:${env.ETHER_PORT}`;
     web3 = new Web3(provider);
 }
 

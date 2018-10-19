@@ -1,6 +1,7 @@
 // using the infura.io node, otherwise ipfs requires you to run a
 // daemon on your own computer/server.
-require('dotenv').config();
+const config = require('../../config');
+require('dotenv').config({path: `${config.root}/.env`});
 const env = process.env;
 
 const IPFS = require('ipfs-api');

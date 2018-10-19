@@ -48,7 +48,7 @@ contract Election is Ownable, CandidateList, VoterList {
      * @param _endDate 선거의 종료 날짜(timestamp)
      * @param _finiteElection 유권자가 한정된 선거인지 아닌지
      */
-    constructor(
+    function Election(
         string _voteName,
         string _voteDescription,
         address _owner,

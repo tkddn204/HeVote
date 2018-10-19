@@ -1,7 +1,8 @@
 'use strict';
 
 // dependencies
-require('dotenv').config();
+const config = require('./config');
+require('dotenv').config({path: `${config.root}/.env`});
 
 const express = require('express');
 const passport = require('passport');
@@ -9,7 +10,6 @@ const debug = require('debug')('HeVote:server');
 const http = require('http');
 const mongoose = require('mongoose');
 
-const config = require('./config');
 const app = express();
 
 // set port

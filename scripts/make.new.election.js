@@ -1,9 +1,10 @@
 const electionFactoryApi = require('../app/ethereum/api/election.factory.api');
 const electionApi = require('../app/ethereum/api/election.api');
 const candidateApi = require('../app/ethereum/api/candidate.api');
-const adminAddress = require('../config/contract-address.json')['admin_address'];
+const contractInformation = require('../config/contract-address.json');
 const timeUtil = require('../app/utils/time.util');
 
+const web3 = require('../app/ethereum/web3');
 const ipfs = require('../app/ipfs/ipfs');
 const fs = require('fs');
 const config = require('../config');
@@ -17,11 +18,10 @@ const makeNewContract = async (
     finiteElection) => {
 
     const startDateTime = timeUtil.dateStringToTimestamp(startDate);
-    const endDateTime = timeUtil.dateStringToTimestamp(startDate);
-
+    const endDateTime = timeUtil.dateStringToTimestamp(endDate);
     // 선거 생성
     await electionFactoryApi.makeNewElection(
-        adminAddress,
+        contractInformation['admin_address'],
         electionName,
         electionDescription,
         electionOwner,
@@ -92,38 +92,32 @@ const saveHePublicKeyOfIpfsHash = async (
     });
 };
 
-const makeNewElection = async (
-    electionName,
-    electionDescription,
-    electionOwner,
-    startDate,
-    endDate,
-    finiteElection,
-    candidateList,
-    candidateCommitmentList,
-    p, L
-) => {
+const makeNewElection = async (params) => {
     const electionAddress = await makeNewContract(
-        electionName,
-        electionDescription,
-        electionOwner,
-        startDate,
-        endDate,
-        finiteElection);
+        params.electionName,
+        params.electionDescription,
+        params.electionOwner,
+        params.startDate,
+        params.endDate,
+        params.finiteElection);
+    console.log("Contract Created! Address: ", electionAddress);
     await addCandidates(
         electionAddress,
-        electionOwner,
-        candidateList,
-        candidateCommitmentList
+        params.electionOwner,
+        params.candidateList,
+        params.candidateCommitmentList
     );
+    console.log("Add Candidates Success.");
     await createHePublicKey(
         electionAddress,
-        electionOwner,
-        p, L);
+        params.electionOwner,
+        params.p, params.L);
+    console.log("Create He's PublicKey");
     await saveHePublicKeyOfIpfsHash(
         electionAddress,
-        electionOwner
+        params.electionOwner
     );
+    console.log("Save He's PublicKey To Contract And Save To IPFS!")
 };
 
 const readline = require('readline');
@@ -135,67 +129,62 @@ const rl = readline.createInterface({
 
 const electionParams = {};
 
-rl.question('Election Name: ', (electionName) => {
-    electionParams['electionName'] = electionName;
+const questionList = [
+    'Election Name: ',
+    'Election Description: ',
+    'Election Owner: ',
+    'Election Start Date: ',
+    'Election End Date: ',
+    'Is election Finite?(y/n): ',
+    'Candidate List: ',
+    'Candidate Commitment List: ',
+    'The P of Helib: ',
+    'The L of Helib: ',
+    'good?(y/n): '
+];
 
-    rl.question('Election Description: ', (electionDescription) => {
-        electionParams['electionDescription'] = electionDescription;
+const functionList = [
+    (electionName) => electionParams.electionName = electionName,
+    (electionDescription) => electionParams.electionDescription = electionDescription,
+    (electionOwner) => electionParams.electionOwner = electionOwner.toLowerCase(),
+    (startDate) => electionParams.startDate = startDate,
+    (endDate) => electionParams.endDate = endDate,
+    (electionFinite) => electionParams.finiteElection = electionFinite === 'y' || electionFinite === 'Y',
+    (candidateList) => electionParams.candidateList = candidateList.split(','),
+    (candidateCommitmentList) => electionParams.candidateCommitmentList = candidateCommitmentList.split(','),
+    (p) => electionParams['p'] = parseInt(p),
+    (L) => {
+        electionParams['L'] = parseInt(L);
+        console.log(electionParams);
+    },
+    (good) => {
+        if (good === 'y' || good === 'Y') {
+            rl.close();
+            makeNewElection(electionParams).then(() => {
+                console.log("done!");
+                process.exit(0);
+            }).catch(e => {
+                console.error(e);
+                process.exit(1);
+            })
+        } else {
+            console.log(rl.history);
+            rl.close();
+            process.exit(0);
+        }
+    }
+];
 
-        rl.question('Election Owner: ', (electionOwner) => {
-            electionParams['electionOwner'] = electionOwner;
+let questionIndex = 1;
 
-            rl.question('Election Start Date: ', (startDate) => {
-                electionParams['startDate'] = startDate;
-
-                rl.question('Election End Date: ', (endDate) => {
-                    electionParams['endDate'] = endDate;
-
-                    rl.question('Is election finite?(y/n) : ', (electionFinite) => {
-                        electionParams['finiteElection'] = electionFinite === 'y' || electionFinite === 'Y';
-
-                        rl.question('Candidate List: ', (candidateList) => {
-                            electionParams['candidateList'] = candidateList.split(',');
-
-                            rl.question('Candidate Commitment List: ', (candidateCommitmentList) => {
-                                electionParams['candidateCommitmentList'] = candidateCommitmentList.split(',');
-
-                                rl.question('The P of Helib : ', (p) => {
-                                    electionParams['p'] = parseInt(p);
-
-                                    rl.question('The L of Helib : ', (L) => {
-                                        electionParams['L'] = parseInt(L);
-
-                                        console.log(electionParams);
-                                        console.log("\n");
-                                        rl.question('good?(y/n): ', (good) => {
-                                            if (good === 'y' || good === 'Y') {
-                                                rl.close();
-                                                makeNewElection(
-                                                    electionParams.electionName,
-                                                    electionParams.electionDescription,
-                                                    electionParams.electionOwner,
-                                                    electionParams.startDate,
-                                                    electionParams.endDate,
-                                                    electionParams.finiteElection,
-                                                    electionParams.candidateList,
-                                                    electionParams.candidateCommitmentList,
-                                                    electionParams.p,
-                                                    electionParams.L).then(() => {
-                                                    console.log("done!");
-                                                });
-                                            } else {
-                                                // TODO: 다시
-                                            }
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    });
-});
+const question = async (questionContent, func) => {
+    return rl.question(questionContent, (result) => {
+        func(result);
+        if (questionIndex < questionList.length) {
+            question(questionList[questionIndex], functionList[questionIndex++])
+        }
+    })
+};
 
 
+question(questionList[0], functionList[0]);

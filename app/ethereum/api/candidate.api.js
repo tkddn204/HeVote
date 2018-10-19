@@ -3,12 +3,12 @@ const Election = require('../election');
 const addCandidate = async (electionAddress, ownerAddress,
                             candidateName, commitment) =>
     await Election(electionAddress).methods.addCandidate(candidateName, commitment)
-        .send({from: ownerAddress});
+        .send({from: ownerAddress, gas: 5000000});
 
 const removeCandidate = async (electionAddress, ownerAddress,
                                candidateIndex) =>
     await Election(electionAddress).methods.removeCandidate(candidateIndex)
-        .send({from: ownerAddress});
+        .send({from: ownerAddress, gas: 1000000});
 
 const getCandidate = async (election, index) => {
     const rawCandidate = await election.methods.getCandidate(index).call();

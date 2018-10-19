@@ -1,5 +1,6 @@
 const path = require('path');
-require('dotenv').config();
+const config = require('./config');
+require('dotenv').config({path: `${config.root}/.env`});
 const env = process.env;
 
 
@@ -10,9 +11,9 @@ module.exports = {
     test_directory: "./test/ethereum",
     networks: {
         development: {
-            host: env.GANACHE_URL,
-            port: env.GANACHE_PORT,
-            network_id: env.GANACHE_NETWORK_ID
+            host: env.ETHER_URL,
+            port: env.ETHER_PORT,
+            network_id: env.ETHER_NETWORK_ID
         }
     },
     solc: {

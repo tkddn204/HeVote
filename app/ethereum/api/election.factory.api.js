@@ -23,7 +23,7 @@ const makeNewElection = async (adminAddress,
         startDate,
         endDate,
         finiteElection
-    ).send({from: adminAddress});
+    ).send({from: adminAddress, gas: 5000000});
 
 module.exports = {
     getOwner,
