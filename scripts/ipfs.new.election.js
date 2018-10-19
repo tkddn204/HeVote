@@ -3,12 +3,20 @@ const fs = require('fs');
 const electionApi = require('../app/ethereum/api/election.api');
 const config = require('../config');
 
-const addIPFSAndSetHepublicKey = (contractAddress, ownerAddress) => {
+const contractAddress = process.argv[2];
+const ownerAddress = process.argv[3];
+
+if (!contractAddress || !ownerAddress) {
+    console.log("Please Put Arguments: contractAddress ownerAddress");
+    process.exit(1);
+}
+
+const addIPFSAndSetHepublicKey = async (contractAddress, ownerAddress) => {
     const publicKeyFilePath = `${config.root}/data/publicKey/${contractAddress}.bin`;
     const publicKeyFile = fs.readFileSync(publicKeyFilePath);
     let buffer = new Buffer.from(publicKeyFile);
 
-    ipfs.files.add(buffer, async (err, res) => {
+    await ipfs.files.add(buffer, async (err, res) => {
         if (err) {
             console.log(err);
             return;

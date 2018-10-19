@@ -2,10 +2,11 @@ const electionFactoryApi = require('../app/ethereum/api/election.factory.api');
 const electionApi = require('../app/ethereum/api/election.api');
 const candidateApi = require('../app/ethereum/api/candidate.api');
 const contractInformation = require('../config/contract-address.json');
-const ipfsNewElection = require('./ipfs.new.election');
 const timeUtil = require('../app/utils/time.util');
 
 const fs = require('fs');
+const readLine = require('readline');
+const execSync = require('child_process').execSync;
 const Hec = require('../app/hec/hec');
 
 const makeNewContract = async (
@@ -95,16 +96,12 @@ const makeNewElection = async (params) => {
         params.p, params.L);
     console.log("Create He's PublicKey");
 
-    await ipfsNewElection(
-        electionAddress,
-        params.electionOwner
-    );
+    await execSync(`node ${process.env.root}/scripts/ipfs.new.election.js ${electionAddress} ${params.electionOwner}`);
     console.log("Save He's PublicKey To Contract And Save To IPFS!")
 };
 
-const readline = require('readline');
-
-const rl = readline.createInterface({
+// Input Election's Information with ReadLine module.
+const rl = readLine.createInterface({
     input: process.stdin,
     output: process.stdout
 });
@@ -157,8 +154,9 @@ const functionList = [
     }
 ];
 
-let questionIndex = 1;
 
+// Recursion
+let questionIndex = 1;
 const question = async (questionContent, func) => {
     return rl.question(questionContent, (result) => {
         func(result);
@@ -167,6 +165,5 @@ const question = async (questionContent, func) => {
         }
     })
 };
-
 
 question(questionList[0], functionList[0]);
