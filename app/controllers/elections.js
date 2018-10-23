@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const parallel = require('async/parallel');
 
 const electionApi = require('../ethereum/api/election.api');
 const electionFactoryApi = require('../ethereum/api/election.factory.api');
@@ -169,37 +170,41 @@ exports.changeState = async (req, res) => {
 
                 let lock = 0;
 
+                // 병렬 실행을 위해 설정
+                let ipfsGetFuctions = [];
                 for (let i = 0;i < votedVoterAddressList.length; i++) {
                     // 유권자 주소로 이더리움에 저장된 IPFS 해쉬값을 읽는다
                     const fileHash = await electionApi.getBallot(
                         electionAddress, votedVoterAddressList[i]);
-
-                    // 모든 유권자 주소의 IPFS 파일을 모두 다운받거나, 있으면 그걸 사용한다
-                    ipfs.files.get(fileHash, async (err, files) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                        fs.writeFileSync(`${electionResultDirPath}/${files[0].path}`,
-                            files[0].content.toString('utf8'));
-                        lock += 1;
-                        if (lock === files.length) {
-                            // 동형암호로 집계를 한다
-                            const candidateListLength = await candidateApi.getCandidateLength(electionAddress);
-                            await Hec.tally(electionAddress, candidateListLength,
-                                "data", async (out, err) => {
-                                    if (err) {
-                                        return res.send(err);
-                                    }
-                                    console.log(out);
-                                    const resultArray = Hec.getResult(electionAddress);
-                                    // 이더리움에 결과 저장
-                                    await electionApi.setTallyResult(electionAddress, ownerAddress, resultArray.toString());
-
-                                    res.redirect(req.path);
-                                });
-                        }
-                    });
+                    ipfsGetFuctions.push((cb) => ipfs.files.get(fileHash, cb));
                 }
+
+                await parallel([
+                    (cb) => ipfs.files.get(fileHash, cb)
+                ], async (err, files) => {
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    // 모든 유권자 주소의 IPFS 파일을 모두 다운받음
+                    fs.writeFileSync(`${electionResultDirPath}/${files[0].path}`,
+                        files[0].content.toString('utf8'));
+                });
+
+                // 동형암호로 집계
+                const candidateListLength = await candidateApi.getCandidateLength(electionAddress);
+                await Hec.tally(electionAddress, candidateListLength,
+                    "data", async (out, err) => {
+                        if (err) {
+                            return res.send(err);
+                        }
+                        console.log(out);
+                        const resultArray = Hec.getResult(electionAddress);
+                        // 이더리움에 결과 저장
+                        await electionApi.setTallyResult(electionAddress, ownerAddress, resultArray.toString());
+
+                        res.redirect(req.path);
+                    });
             } else {
                 res.redirect(req.path);
             }
