@@ -14,8 +14,11 @@ const removeVoterFromVoterList = async (electionAddress, ownerAddress, voterAddr
     await Election(electionAddress).methods.removeVoterFromVoterList(voterAddress)
     .send({from: ownerAddress});
 
-const getVoterCount = async (electionAddress) =>
-    await Election(electionAddress).methods.getVoterCount().call();
+const getVotedVoterList = async (electionAddress) =>
+    await Election(electionAddress).methods.getVotedVoterList().call();
+
+const getTotalVoterCount = async (electionAddress) =>
+    await Election(electionAddress).methods.getTotalVoterCount().call();
 
 const getVoterState = async (electionAddress, voterAddress) => {
     const rawVoterState = await Election(electionAddress).methods.getVoterState(voterAddress).call();
@@ -25,6 +28,7 @@ const getVoterState = async (electionAddress, voterAddress) => {
 module.exports = {
     addVoterToVoterList,
     removeVoterFromVoterList,
-    getVoterCount,
+    getVotedVoterList,
+    getTotalVoterCount,
     getVoterState
 };

@@ -160,18 +160,18 @@ exports.changeState = async (req, res) => {
             if (electionState === '3') {
                 // 투표 집계
 
-                // 선거 폴더의 파일 이름(=유권자 주소)을 모두 읽는다
-                const electionDirPath = `./data/candidate/${electionAddress}`;
-                const files = fs.readdirSync(path.resolve(electionDirPath));
+                // 투표한 유권자들의 주소를 모두 읽는다
+                const votedVoterAddressList = voterApi.getVotedVoterList(electionAddress);
 
                 // 선거 결과를 저장할 디렉토리를 만든다
                 const electionResultDirPath = path.resolve(`./data/result/${electionAddress.toLowerCase()}`);
                 mkdirSync(electionResultDirPath);
 
                 let lock = 0;
-                for (let i = 0; i < files.length; i++) {
+                for (let votedVoter in votedVoterAddressList) {
                     // 유권자 주소로 이더리움에 저장된 IPFS 해쉬값을 읽는다
-                    const fileHash = await electionApi.getBallot(electionAddress, files[i]);
+                    const fileHash = await electionApi.getBallot(electionAddress, votedVoter);
+
                     // 모든 유권자 주소의 IPFS 파일을 모두 다운받거나, 있으면 그걸 사용한다
                     ipfs.files.get(fileHash, async (err, files) => {
                         if (err) {

@@ -221,9 +221,10 @@ contract Election is Ownable, CandidateList, VoterList {
         require(endDate >= now && startDate <= now);
 
         if (getVoterState(_voterAddress) != uint(VoterState.Voted)) {
-            ballots[_voterAddress] = _ballotHash;
-            setVoted(_voterAddress);
-            ballotCount++;
+            if(setVoted(_voterAddress)) {
+                ballots[_voterAddress] = _ballotHash;
+                ballotCount++;
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ const publicKeyFilePath = `${config.root}/data/publicKey/${electionAddress}.bin`
 const publicKeyFile = fs.readFileSync(publicKeyFilePath);
 let buffer = new Buffer.from(publicKeyFile);
 
+console.log("add He PublicKey to ipfs... wait a minute....");
 ipfs.files.add(buffer, async (err, res) => {
     if (err) {
         console.log(err);

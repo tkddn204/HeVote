@@ -7,12 +7,21 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
  */
 contract VoterList is Ownable {
 
-    uint internal voterCount;
+    /**
+     * @dev 유권자들의 주소 목록
+     *      원래는 파일 시스템으로 해결하려 했으나, 불안정함을 깨닫고
+     *      컨트렉트에 저장하는 것이 DApp으로서 더 낫다고 판단하여 저장하기로 결정함
+     *      votedVoters : 투표를 한 유권자들의 목록
+     */
+    address[] internal votedVoterList;
+
+    // totalVoterCount : (유권자 한정 선거) 유권자들의 총 합
+    uint internal totalVoterCount;
 
     /**
      * @dev 유권자의 현재 상태
      *      None : 투표를 할 수 있는 상태
-     *      VoteAble : 유권자가 한정된 선거에서 투표를 할 수 있는 상태
+     *      VoteAble : (유권자 한정 선거) 투표를 할 수 있는 상태
      *      Voted : 투표를 완료한 상태
      */
     enum VoterState {
@@ -38,7 +47,7 @@ contract VoterList is Ownable {
     function addVoterToVoterList(address _voterAddress) public onlyOwner returns (bool success) {
         if (voterState[_voterAddress] == VoterState.None) {
             voterState[_voterAddress] = VoterState.VoteAble;
-            voterCount++;
+            totalVoterCount++;
             success = true;
         }
     }
@@ -51,17 +60,25 @@ contract VoterList is Ownable {
     function removeVoterFromVoterList(address _voterAddress) public onlyOwner returns (bool success) {
         if (voterState[_voterAddress] == VoterState.VoteAble) {
             voterState[_voterAddress] = VoterState.None;
-            voterCount--;
+            totalVoterCount--;
             success = true;
         }
+    }
+
+    /**
+     * @dev 투표한 사람들의 주소를 리턴하는 메소드
+     * @return 투표한 사람들의 주소 리스트
+     */
+    function getVotedVoterList() external view returns(address[]) {
+        return votedVoterList;
     }
 
     /**
      * @dev 유권자 수가 한정된 선거일 경우, 유권자의 총 인원 수를 얻는 메소드
      * @return 유권자의 수
      */
-    function getVoterCount() external view returns(uint) {
-        return voterCount;
+    function getTotalVoterCount() external view returns(uint) {
+        return totalVoterCount;
     }
 
     /**
@@ -78,6 +95,7 @@ contract VoterList is Ownable {
      * @return success 성공하면 true, 실패하면 false
      */
     function setVoted(address _voterAddress) internal returns (bool success) {
+        votedVoterList.push(_voterAddress);
         voterState[_voterAddress] = VoterState.Voted;
         success = true;
     }

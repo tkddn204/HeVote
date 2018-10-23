@@ -7,8 +7,18 @@ const electionFactoryApi = require('../ethereum/api/election.factory.api');
 exports.register = (req, res) =>
     res.render('account/register');
 
+// https://stackoverflow.com/a/46181/6656470
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
 exports.create = async (req, res, next) => {
     const {username, password} = req.body;
+
+    if (!validateEmail(username)) {
+        return res.render('account/register', {error: "Wrong Email!"});
+    }
 
     // 계정을 만듦
     const ethAccount = await accountApi.makeNewAccount(password);

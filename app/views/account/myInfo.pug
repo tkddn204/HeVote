@@ -12,14 +12,14 @@ block content
             p.text-center #{user.etherAccount}
             hr(style='margin: 40px 40px 20px')
             h4 내가 참여한 선거 목록
-            if(votingElections)
+            if(votingElections.length)
                 .list-group
                     each election in votingElections
                         +voteItem(election)
             else
                 p.text-center(style='color: gray') 아직 참여하신 선거가 없습니다.
             hr(style='margin: 40px 40px 20px')
-            if(deployedElections)
+            if(deployedElections.length)
                 h4 주최 선거 목록
                 .list-group
                     each election in deployedElections
