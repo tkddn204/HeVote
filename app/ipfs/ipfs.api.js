@@ -10,7 +10,7 @@ const addPublicKeyOfHe = async (contractAddress, ownerAddress) => {
     const publicKeyFile = fs.readFileSync(publicKeyFilePath);
     let buffer = new Buffer.from(publicKeyFile);
 
-    await parallel([(cb) => ipfs.files.add(buffer, cb)], async (err, res) => {
+    return await parallel([(cb) => ipfs.files.add(buffer, cb)], async (err, res) => {
         if (err) {
             console.log(err);
             return;

@@ -98,12 +98,12 @@ const makeNewElection = async (params) => {
         electionAddress,
         params.electionOwner,
         params.p, params.L);
-    console.log("Create He's PublicKey");
+    console.log("Success to create He's PublicKey!");
 
     // IPFS에 공개키 저장
     await ipfsApi(electionAddress, params.electionOwner);
 
-    console.log(`Success to Create ${params.electionName}!`);
+    console.log(`Success to create ${params.electionName}!`);
 };
 
 // Input Election's Information with ReadLine module.
