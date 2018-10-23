@@ -3,7 +3,7 @@ const electionApi = require('../app/ethereum/api/election.api');
 const candidateApi = require('../app/ethereum/api/candidate.api');
 const contractInformation = require('../config/contract-address.json');
 const timeUtil = require('../app/utils/time.util');
-const series = require('async/waterfall');
+const waterfall = require('async/waterfall');
 
 const fs = require('fs');
 const config = require('../config');
@@ -97,16 +97,29 @@ const makeNewElection = async (params) => {
     console.log("Add Candidates Success.");
 
     // 공개키 만든 후 IPFS에 공개키 저장
-    await waterfall([(cb) => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L, cb),
-            (publicKeyFilePath, cb) => ipfsApi(publicKeyFilePath, electionAddress, params.electionOwner, cb)],
-        (err, result) => {
-            if(result) {
-                console.log(`Success to create ${params.electionName}!`);
-            } else {
-                console.log(`Fail to create ${params.electionName}...`);
+    try {
+        await new Promise((resolve, reject) => waterfall([(cb) => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L, cb),
+                async (cb) => {
+                    try {
+                        const result = await ipfsApi(electionAddress, params.electionOwner);
+                        cb(null, result);
+                    } catch (e) {
+                        cb(e, false);
+                    }
+                }],
+            (err, result) => {
+                if (err) {
+                    console.log(`Fail to create ${params.electionName}...`);
+                    reject(err);
+                } else {
+                    console.log(`Success to create ${params.electionName}!`);
+                    resolve(result);
+                }
             }
-        }
-    );
+        ));
+    } catch (e) {
+        console.error(e);
+    }
 };
 
 // Input Election's Information with ReadLine module.
