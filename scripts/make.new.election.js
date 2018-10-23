@@ -97,7 +97,8 @@ const makeNewElection = async (params) => {
     await createHePublicKey(
         electionAddress,
         params.electionOwner,
-        params.p, params.L);
+        params.p,
+        params.L);
     console.log("Success to create He's PublicKey!");
 
     // IPFS에 공개키 저장
