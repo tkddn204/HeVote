@@ -168,9 +168,11 @@ exports.changeState = async (req, res) => {
                 mkdirSync(electionResultDirPath);
 
                 let lock = 0;
-                for (let votedVoter in votedVoterAddressList) {
+
+                for (let i = 0;i < votedVoterAddressList.length; i++) {
                     // 유권자 주소로 이더리움에 저장된 IPFS 해쉬값을 읽는다
-                    const fileHash = await electionApi.getBallot(electionAddress, votedVoter);
+                    const fileHash = await electionApi.getBallot(
+                        electionAddress, votedVoterAddressList[i]);
 
                     // 모든 유권자 주소의 IPFS 파일을 모두 다운받거나, 있으면 그걸 사용한다
                     ipfs.files.get(fileHash, async (err, files) => {
