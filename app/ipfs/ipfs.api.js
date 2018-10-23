@@ -5,20 +5,22 @@ const electionApi = require('../../app/ethereum/api/election.api');
 const config = require('../../config');
 const parallel = require('async/parallel');
 
-const addPublicKeyOfHe = (contractAddress, ownerAddress) => {
+const addPublicKeyOfHe = (contractAddress, ownerAddress, cb) => {
     const publicKeyFilePath = `${config.root}/data/publicKey/${contractAddress}.bin`;
     const publicKeyFile = fs.readFileSync(publicKeyFilePath);
     let buffer = new Buffer.from(publicKeyFile);
 
-    return parallel([(cb) => ipfs.files.add(buffer, cb)], async (err, res) => {
+    parallel([(cb) => ipfs.files.add(buffer, cb)], async (err, res) => {
         if (err) {
             console.log(err);
+            cb(err, false);
             return;
         }
-        const publicKeyFileHash = res[0].hash;
+        const publicKeyFileHash = res[0][0].hash;
         console.log(`publicKey Hash : ${publicKeyFileHash}`);
         await electionApi.setPublicKeyOfHe(contractAddress, ownerAddress, publicKeyFileHash);
         console.log("ipfs-contract saved.");
+        cb(null, true);
     });
 };
 

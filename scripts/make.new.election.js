@@ -3,6 +3,7 @@ const electionApi = require('../app/ethereum/api/election.api');
 const candidateApi = require('../app/ethereum/api/candidate.api');
 const contractInformation = require('../config/contract-address.json');
 const timeUtil = require('../app/utils/time.util');
+const series = require('async/series');
 
 const fs = require('fs');
 const config = require('../config');
@@ -60,17 +61,17 @@ const addCandidates = async (
 const createHePublicKey = async (
     electionAddress,
     electionOwner,
-    p, L,
-    cb
+    p, L, cb
 ) => {
     await Hec.createKeys(electionAddress, p, L, 'data', async () => {
         const publicKeyFilePath = "./data/publicKey/" + electionAddress + ".bin";
         const fileSize = fs.statSync(publicKeyFilePath).size;
         if (fileSize > 0) {
             console.log("Success to create He's PublicKey!");
-            cb();
+            cb(null, true);
         } else {
             console.error("failed: file not Saved");
+            cb(new Error("failed: file not Saved"), false);
         }
     });
 };
@@ -96,13 +97,16 @@ const makeNewElection = async (params) => {
     console.log("Add Candidates Success.");
 
     // 공개키 만든 후 IPFS에 공개키 저장
-    await createHePublicKey(
-        electionAddress,
-        params.electionOwner,
-        params.p,
-        params.L,
-        ipfsApi(electionAddress, params.electionOwner));
-    console.log(`Success to create ${params.electionName}!`);
+    await series([(cb) => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L, cb),
+            (cb) => ipfsApi(electionAddress, params.electionOwner, cb)],
+        (err, result) => {
+            if(!result.includes(false)) {
+                console.log(`Success to create ${params.electionName}!`);
+            } else {
+                console.log(`Fail to create ${params.electionName}...`);
+            }
+        }
+    );
 };
 
 // Input Election's Information with ReadLine module.
