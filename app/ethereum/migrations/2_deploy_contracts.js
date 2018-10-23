@@ -73,37 +73,31 @@ module.exports = (deployer, network, accounts) =>
         try {
             await new Promise((resolve, reject) => {
                 series([
-                        async (cb) => {
-                            console.log(cb);
-                            await Hec.createKeys(deployedPublicElections[0], 257, 8, 'data', () => {
-                                const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";
-                                const fileSize = fs.statSync(publicKeyFilePath).size;
-                                if (fileSize > 0) {
-                                    console.log("good. Key files saved");
-                                    // cb(null, true);
-                                } else {
-                                    console.error("failed: file not Saved");
-                                    // cb(new Error("failed: file not Saved"), false);
-                                }
-                            });
-                        },
-                        async (cb) => {
-                            console.log(cb);
+                        async () => {
                             try {
-                                const result = await ipfsApi(deployedPublicElections[0], accounts[1]);
-                                // cb(null, result);
+                                await Hec.createKeys(deployedPublicElections[0], 257, 8, 'data', () => {
+                                    const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";
+                                    const fileSize = fs.statSync(publicKeyFilePath).size;
+                                    if (fileSize > 0) {
+                                        console.log("good. Key files saved");
+                                    } else {
+                                        console.error("failed: file not Saved");
+                                    }
+                                });
                             } catch (e) {
-                                // cb(e, false);
+                                reject(e);
+                            }
+                        },
+                        async () => {
+                            try {
+                                await ipfsApi(deployedPublicElections[0], accounts[1]);
+                            } catch (e) {
+                                reject(e);
                             }
                         }],
-                    (params) => {
+                    () => {
                         console.log(`Success to create 대전 지방선거!`);
-                        resolve(result);
-                        // if (err) {
-                        //     console.log(`Fail to create 대전 지방선거...`);
-                        //     reject(err);
-                        // } else {
-                        // }
+                        resolve();
                     }
                 );
             });

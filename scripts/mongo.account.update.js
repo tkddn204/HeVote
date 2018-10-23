@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const accountApi = require('../app/ethereum/api/account.api');
 const Account = require('../app/models/account');
+
+const passport = require('passport');
+require('../config/passport')(passport);
+
 const config = require('../config');
 const contractAddress = require('../config/contract-address.json');
 
@@ -22,15 +26,30 @@ const updateUserDeploy = async (user) => {
     })
 };
 
+const admin = {
+    'username': 'region@election.com',
+    'password': 'asdf1234'
+};
+
 // DB 변경
 Account.findOne({
-    'username': 'region@election.com'
+    'username': admin.username
 }, async (err, result) => {
     if (err) {
-        return console.log(err.message);
+        return console.error(err.message);
     }
     if(result === undefined) {
-        return console.log("region@election.com 으로 회원가입해주세요!");
+        Account.register(new Account(
+            {
+                username: admin.username,
+                etherAccount: (await accountApi.makeNewAccount(admin.password)).address
+            }), admin.password, (err, account) => {
+            if (err) {
+                return console.error(err.message);
+            }
+            passport.authenticate('local');
+            return updateUserDeploy(result);
+        });
     } else {
         return updateUserDeploy(result);
     }
