@@ -20,7 +20,7 @@ const updateUserDeploy = async (user) => {
         finite: false
     }];
     return await user.save((err) => {
-        if (err) return console.log(err.message);
+        if (err) return console.error(err.message);
         console.info("지방선거 완료");
         process.exit();
     })
@@ -38,18 +38,25 @@ Account.findOne({
     if (err) {
         return console.error(err.message);
     }
-    if(result === undefined) {
+    if(result === null) {
         Account.register(new Account(
             {
                 username: admin.username,
-                etherAccount: (await accountApi.makeNewAccount(admin.password)).address
+                etherAccount: contractAddress['test_region_address']
             }), admin.password, (err, account) => {
             if (err) {
                 return console.error(err.message);
             }
-            passport.authenticate('local');
+            //passport.authenticate('local');
+	    Account.findOne({
+    'username': admin.username
+}, async (err, result) => {
+    if (err) {
+        return console.error(err.message);
+    }
             return updateUserDeploy(result);
         });
+});
     } else {
         return updateUserDeploy(result);
     }
