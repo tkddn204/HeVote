@@ -113,7 +113,7 @@ exports.postVote = async (req, res) => {
                 const candidateLength = await candidateApi.getCandidateLength(electionAddress);
                 for(let i = 0; i < candidateLength; i++) {
                     const candidateFile = path.resolve(
-                        `./data/candidate/${electionAddress}/${electionAddress.toLowerCase()}-${i}-${voterAddress}.txt`);
+                        `./data/candidate/${electionAddress.toLowerCase()}-${i}-${voterAddress}.txt`);
                     fs.unlinkSync(candidateFile);
                 }
 
