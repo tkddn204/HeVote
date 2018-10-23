@@ -14,7 +14,7 @@ const addPublicKeyOfHe = async (contractAddress, ownerAddress) => {
             reject(err);
             return;
         }
-        const publicKeyFileHash = res[0][0].hash;
+        const publicKeyFileHash = res[0].hash;
         console.log(`publicKey Hash : ${publicKeyFileHash}`);
         await electionApi.setPublicKeyOfHe(contractAddress, ownerAddress, publicKeyFileHash);
         console.log("ipfs-contract saved.");
