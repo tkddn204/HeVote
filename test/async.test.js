@@ -1,7 +1,7 @@
-
+const fs = require('fs');
 const ipfsApi = require('../app/ipfs/ipfs.api');
 const Hec = require('../app/hec/hec');
-const waterfall = require('async/waterfall');
+const parallel = require('async/parallel');
 
 
 const createHePublicKey = async (
@@ -25,15 +25,21 @@ const createHePublicKey = async (
 describe('async test', () => {
     it('...', async ()=> {
         // 공개키 만든 후 IPFS에 공개키 저장
-        await waterfall([(cb) => createHePublicKey('0x721404D77e7fb27be7F2dc3C2d432d475aF0Aec5', '0xb84c8ccc2f15bb7c84cd742e9053a29ba1a7023f', 257, 8, cb),
-                (publicKeyFilePath, cb) => ipfsApi(publicKeyFilePath, '0x721404D77e7fb27be7F2dc3C2d432d475aF0Aec5', '0xb84c8ccc2f15bb7c84cd742e9053a29ba1a7023f', cb)],
+        await new Promise((resolve, reject) => parallel([(cb) => createHePublicKey('0x721404D77e7fb27be7F2dc3C2d432d475aF0Aec5', '0xb84c8ccc2f15bb7c84cd742e9053a29ba1a7023f', 257, 8, cb),
+                async (cb) => {
+await ipfsApi(null, '0x721404D77e7fb27be7F2dc3C2d432d475aF0Aec5', '0xb84c8ccc2f15bb7c84cd742e9053a29ba1a7023f')
+cb(null, true);
+}],
             (err, result) => {
+		console.log(result);
                 if(result) {
                     console.log(`Success to create!`);
+		    resolve(result);
                 } else {
                     console.log(`Fail to create...`);
+		    reject(err);
                 }
             }
-        );
+        ));
     });
 });
