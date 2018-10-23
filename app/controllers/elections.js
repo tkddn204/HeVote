@@ -184,10 +184,12 @@ exports.changeState = async (req, res) => {
                         console.log(err);
                     }
 
+		    console.log(files);
                     // 모든 유권자 주소의 IPFS 파일을 모두 다운받음
-                    fs.writeFileSync(`${electionResultDirPath}/${files[0].path}`,
-                        files[0].content.toString('utf8'));
-                });
+		    for (let i = 0; i < files.length; i ++) {
+                        fs.writeFileSync(`${electionResultDirPath}/${files[i][0].path}`,
+                            files[i][0].content.toString('utf8'));
+		    }
 
                 // 동형암호로 집계
                 const candidateListLength = await candidateApi.getCandidateLength(electionAddress);
@@ -203,6 +205,7 @@ exports.changeState = async (req, res) => {
 
                         res.redirect(req.path);
                     });
+		});
             } else {
                 res.redirect(req.path);
             }
