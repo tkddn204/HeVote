@@ -29,7 +29,7 @@ const mongoAccountUpdate = (addresses) => {
         return await user.save((err) => {
             if (err) return console.error(err.message);
             console.info("지방선거 완료");
-            process.exit();
+            mongoose.connection.close();
         })
     };
 
