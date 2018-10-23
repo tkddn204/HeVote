@@ -11,7 +11,6 @@
   "version": "2.1.0",
   "private": false,
   "scripts": {
-    "remake": "chmod 775 scripts/remake.sh; ./scripts/remake.sh",
     "make-election": "node scripts/make.new.election.js",
     "compile": "truffle compile",
     "windows-compile": "truffle.cmd compile",

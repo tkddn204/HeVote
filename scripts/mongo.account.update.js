@@ -1,15 +1,13 @@
 const mongoose = require('mongoose');
-
-const accountApi = require('../app/ethereum/api/account.api');
-const Account = require('../app/models/account');
-
 const passport = require('passport');
 require('../config/passport')(passport);
+
+const Account = require('../app/models/account');
 
 const config = require('../config');
 const contractAddress = require('../config/contract-address.json');
 
-mongoose.connect(config.db, { useNewUrlParser: true })
+mongoose.connect(config.db, {useNewUrlParser: true})
     .then(() => console.log("mongoDB connected."))
     .catch(err => console.error(err.message));
 
@@ -38,7 +36,7 @@ Account.findOne({
     if (err) {
         return console.error(err.message);
     }
-    if(result === null) {
+    if (result === null) {
         Account.register(new Account(
             {
                 username: admin.username,
@@ -48,15 +46,15 @@ Account.findOne({
                 return console.error(err.message);
             }
             //passport.authenticate('local');
-	    Account.findOne({
-    'username': admin.username
-}, async (err, result) => {
-    if (err) {
-        return console.error(err.message);
-    }
-            return updateUserDeploy(result);
+            Account.findOne({
+                'username': admin.username
+            }, async (err, result) => {
+                if (err) {
+                    return console.error(err.message);
+                }
+                return updateUserDeploy(result);
+            });
         });
-});
     } else {
         return updateUserDeploy(result);
     }

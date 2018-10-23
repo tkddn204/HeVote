@@ -94,7 +94,7 @@ module.exports = (deployer, network, accounts) =>
                             } catch (e) {
                                 reject(e);
                             }
-                        }],
+                        }, () => require('../../../scripts/mongo.account.update')],
                     () => {
                         console.log(`Success to create 대전 지방선거!`);
                         resolve();
