@@ -60,13 +60,15 @@ const addCandidates = async (
 const createHePublicKey = async (
     electionAddress,
     electionOwner,
-    p, L
+    p, L,
+    cb
 ) => {
     await Hec.createKeys(electionAddress, p, L, 'data', async () => {
         const publicKeyFilePath = "./data/publicKey/" + electionAddress + ".bin";
         const fileSize = fs.statSync(publicKeyFilePath).size;
         if (fileSize > 0) {
-            console.log("good. Key files saved");
+            console.log("Success to create He's PublicKey!");
+            cb();
         } else {
             console.error("failed: file not Saved");
         }
@@ -93,17 +95,13 @@ const makeNewElection = async (params) => {
     );
     console.log("Add Candidates Success.");
 
-    // 공개키 만듦
+    // 공개키 만든 후 IPFS에 공개키 저장
     await createHePublicKey(
         electionAddress,
         params.electionOwner,
         params.p,
-        params.L);
-    console.log("Success to create He's PublicKey!");
-
-    // IPFS에 공개키 저장
-    await ipfsApi(electionAddress, params.electionOwner);
-
+        params.L,
+        ipfsApi(electionAddress, params.electionOwner));
     console.log(`Success to create ${params.electionName}!`);
 };
 
