@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const parallel = require('async/parallel');
+const rimraf = require('rimraf');
 
 const electionApi = require('../ethereum/api/election.api');
 const electionFactoryApi = require('../ethereum/api/election.factory.api');
@@ -93,16 +94,6 @@ exports.electionCreate = async (req, res) => {
     const voterCountPrime = getPrimeNumber(data.voterCount);
     const L = 6 + 2 * Math.ceil(Math.log(voterCountPrime) * 3) / (Math.log(2.0) * 44) + 1;
     console.log(voterCountPrime, L);
-    // hec으로 공개키를 저장합니다.
-    // await hec.createKeys(deployedPublicElections[0], voterCountPrime, L, 'data', async () => {
-    //     const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";
-    //     const fileSize = fs.statSync(publicKeyFilePath).size;
-    //     if (fileSize > 0) {
-    //         console.log("good. Key files saved");
-    //     } else {
-    //         console.error("failed: file not Saved");
-    //     }
-    // });
     res.send("완료");
 };
 
@@ -177,13 +168,13 @@ exports.changeState = async (req, res) => {
                     ipfsGetFunctions.push((cb) => ipfs.files.get(fileHash, cb));
                 }
 
+                // 모든 유권자 주소의 IPFS 파일을 모두 다운받음
                 await parallel(ipfsGetFunctions, async (err, files) => {
                     if (err) {
                         console.log(err);
                     }
 
                     console.log(files);
-                    // 모든 유권자 주소의 IPFS 파일을 모두 다운받음
                     for (let i = 0; i < files.length; i++) {
                         fs.writeFileSync(`${electionResultDirPath}/${files[i][0].path}`,
                             files[i][0].content.toString('utf8'));
@@ -196,11 +187,13 @@ exports.changeState = async (req, res) => {
                             if (err) {
                                 return res.send(err);
                             }
-                            console.log(out);
-                            const resultArray = Hec.getResult(electionAddress);
-                            // 이더리움에 결과 저장
-                            await electionApi.setTallyResult(electionAddress, ownerAddress, resultArray.toString());
 
+                            // 집계 후의 폴더 삭제
+                            rimraf.sync(electionResultDirPath);
+
+                            // 이더리움에 결과 저장
+                            const resultArray = Hec.getResult(electionAddress);
+                            await electionApi.setTallyResult(electionAddress, ownerAddress, resultArray.toString());
                             res.redirect(req.path);
                         });
                 });

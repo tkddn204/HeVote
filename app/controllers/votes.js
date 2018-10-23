@@ -8,6 +8,7 @@ const Hec = require('../hec/hec');
 const ipfs = require('../ipfs/ipfs');
 const config = require('../../config');
 const mkdirSync = require('../utils/fs.util').mkdirSync;
+const rimraf = require('rimraf');
 
 exports.getVote = async (req, res) => {
     if (!req.user) res.redirect('/login');
@@ -107,8 +108,14 @@ exports.postVote = async (req, res) => {
                 const candidateListPath = path.resolve(
                     `./data/candidate/${electionAddress}/${voterAddress}`);
 
-                // 파일 내용 삭제
-                fs.writeFileSync(candidateListPath, "");
+                // 이 유권자와 관련된 후보자 파일 삭제
+                rimraf.sync(candidateListPath);
+                const candidateLength = await candidateApi.getCandidateLength(electionAddress);
+                for(let i = 0; i < candidateLength; i++) {
+                    const candidateFile = path.resolve(
+                        `./data/candidate/${electionAddress}/${electionAddress.toLowerCase()}-${i}-${voterAddress}.txt`);
+                    fs.unlinkSync(candidateFile);
+                }
 
                 // DB 업데이트
                 const finiteElection = await electionApi.isFiniteElection(electionAddress);
