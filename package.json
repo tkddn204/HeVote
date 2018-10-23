@@ -13,6 +13,7 @@
   "scripts": {
     "make-election": "node scripts/make.new.election.js",
     "compile": "truffle compile",
+    "migration": "truffle migration --reset",
     "windows-compile": "truffle.cmd compile",
     "windows-migration": "truffle.cmd migration --reset",
     "start": "./node_modules/.bin/cross-env NODE_ENV=development ./node_modules/.bin/nodemon server.js",
