@@ -1,4 +1,5 @@
 const fs = require('fs');
+const series = require('async/series');
 const timeUtil = require('../../utils/time.util');
 const ElectionFactory = artifacts.require('./ElectionFactory.sol');
 const Election = artifacts.require('./Election.sol');
@@ -67,39 +68,45 @@ module.exports = (deployer, network, accounts) =>
 
         // data 디렉토리 생성
         Hec.makeDataDirectory();
+
         // hec으로 공개키를 저장합니다.
         try {
-            await new Promise((resolve, reject) => series([
-                    async (cb) => {
-                        await Hec.createKeys(deployedPublicElections[0], 257, 8, 'data', () => {
-                            const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";
-                            const fileSize = fs.statSync(publicKeyFilePath).size;
-                            if (fileSize > 0) {
-                                console.log("good. Key files saved");
-                                cb(null, true);
-                            } else {
-                                cb(new Error("failed: file not Saved"), false);
+            await new Promise((resolve, reject) => {
+                series([
+                        async (cb) => {
+                            console.log(cb);
+                            await Hec.createKeys(deployedPublicElections[0], 257, 8, 'data', () => {
+                                const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";
+                                const fileSize = fs.statSync(publicKeyFilePath).size;
+                                if (fileSize > 0) {
+                                    console.log("good. Key files saved");
+                                    // cb(null, true);
+                                } else {
+                                    console.error("failed: file not Saved");
+                                    // cb(new Error("failed: file not Saved"), false);
+                                }
+                            });
+                        },
+                        async (cb) => {
+                            console.log(cb);
+                            try {
+                                const result = await ipfsApi(deployedPublicElections[0], accounts[1]);
+                                // cb(null, result);
+                            } catch (e) {
+                                // cb(e, false);
                             }
-                        });
-                    },
-                    async (cb) => {
-                        try {
-                            const result = await ipfsApi(deployedPublicElections[0], accounts[1]);
-                            cb(null, result);
-                        } catch (e) {
-                            cb(e, false);
-                        }
-                    }],
-                (err, result) => {
-                    if (err) {
-                        console.log(`Fail to create 대전 지방선거...`);
-                        reject(err);
-                    } else {
+                        }],
+                    (params) => {
                         console.log(`Success to create 대전 지방선거!`);
                         resolve(result);
+                        // if (err) {
+                        //     console.log(`Fail to create 대전 지방선거...`);
+                        //     reject(err);
+                        // } else {
+                        // }
                     }
-                }
-            ));
+                );
+            });
         } catch (e) {
             console.error(e);
         }

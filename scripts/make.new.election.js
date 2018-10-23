@@ -62,7 +62,7 @@ const createHePublicKey = async (
     electionOwner,
     p, L, cb
 ) => {
-    await Hec.createKeys(electionAddress, p, L, 'data', async () => {
+    await Hec.createKeys(electionAddress, p, L, 'data', () => {
         const publicKeyFilePath = "./data/publicKey/" + electionAddress + ".bin";
         const fileSize = fs.statSync(publicKeyFilePath).size;
         if (fileSize > 0) {
