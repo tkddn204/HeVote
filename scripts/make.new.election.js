@@ -8,6 +8,7 @@ const fs = require('fs');
 const config = require('../config');
 const readLine = require('readline');
 const Hec = require('../app/hec/hec');
+const ipfsApi = require('../app/ipfs/ipfs.api');
 
 const makeNewContract = async (
     electionName,
@@ -73,6 +74,7 @@ const createHePublicKey = async (
 };
 
 const makeNewElection = async (params) => {
+    // 새로운 선거 컨트렉트 생성
     const electionAddress = await makeNewContract(
         params.electionName,
         params.electionDescription,
@@ -82,6 +84,7 @@ const makeNewElection = async (params) => {
         params.finiteElection);
     console.log("Contract Created! Contract Address:", electionAddress);
 
+    // 후보자 목록 추가
     await addCandidates(
         electionAddress,
         params.electionOwner,
@@ -90,23 +93,17 @@ const makeNewElection = async (params) => {
     );
     console.log("Add Candidates Success.");
 
+    // 공개키 만듦
     await createHePublicKey(
         electionAddress,
         params.electionOwner,
         params.p, params.L);
     console.log("Create He's PublicKey");
 
-    // ./election-address.json에 저장
-    const fd = await fs.openSync(`${config.root}/scripts/election-address.json`, 'w');
-    const jsonObj = {
-        electionAddress: electionAddress,
-        ownerAddress: params.electionOwner
-    };
-    fs.writeFileSync(`${config.root}/scripts/election-address.json`,
-        new Buffer.from(JSON.stringify(jsonObj)), 'utf8', (err) => {
-            if (err) throw 'error writing file: ' + err;
-            fs.close(fd, () => console.log(JSON.stringify(jsonObj)));
-        });
+    // IPFS에 공개키 저장
+    await ipfsApi(electionAddress, params.electionOwner);
+
+    console.log(`Success to Create ${params.electionName}!`);
 };
 
 // Input Election's Information with ReadLine module.

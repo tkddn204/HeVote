@@ -12,7 +12,7 @@
   "private": false,
   "scripts": {
     "remake": "chmod 775 scripts/remake.sh; ./scripts/remake.sh",
-    "make-election": "chmod 775 scripts/makeElection.sh; ./scripts/makeElection.sh",
+    "make-election": "node scripts/make.new.election.js",
     "compile": "truffle compile",
     "windows-compile": "truffle.cmd compile",
     "windows-migration": "truffle.cmd migration --reset",

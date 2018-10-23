@@ -168,11 +168,9 @@ exports.changeState = async (req, res) => {
                 const electionResultDirPath = path.resolve(`./data/result/${electionAddress.toLowerCase()}`);
                 mkdirSync(electionResultDirPath);
 
-                let lock = 0;
-
                 // 병렬 실행을 위해 설정
                 let ipfsGetFunctions = [];
-                for (let i = 0;i < votedVoterAddressList.length; i++) {
+                for (let i = 0; i < votedVoterAddressList.length; i++) {
                     // 유권자 주소로 이더리움에 저장된 IPFS 해쉬값을 읽는다
                     const fileHash = await electionApi.getBallot(
                         electionAddress, votedVoterAddressList[i]);
@@ -184,28 +182,28 @@ exports.changeState = async (req, res) => {
                         console.log(err);
                     }
 
-		    console.log(files);
+                    console.log(files);
                     // 모든 유권자 주소의 IPFS 파일을 모두 다운받음
-		    for (let i = 0; i < files.length; i ++) {
+                    for (let i = 0; i < files.length; i++) {
                         fs.writeFileSync(`${electionResultDirPath}/${files[i][0].path}`,
                             files[i][0].content.toString('utf8'));
-		    }
+                    }
 
-                // 동형암호로 집계
-                const candidateListLength = await candidateApi.getCandidateLength(electionAddress);
-                await Hec.tally(electionAddress, candidateListLength,
-                    "data", async (out, err) => {
-                        if (err) {
-                            return res.send(err);
-                        }
-                        console.log(out);
-                        const resultArray = Hec.getResult(electionAddress);
-                        // 이더리움에 결과 저장
-                        await electionApi.setTallyResult(electionAddress, ownerAddress, resultArray.toString());
+                    // 동형암호로 집계
+                    const candidateListLength = await candidateApi.getCandidateLength(electionAddress);
+                    await Hec.tally(electionAddress, candidateListLength,
+                        "data", async (out, err) => {
+                            if (err) {
+                                return res.send(err);
+                            }
+                            console.log(out);
+                            const resultArray = Hec.getResult(electionAddress);
+                            // 이더리움에 결과 저장
+                            await electionApi.setTallyResult(electionAddress, ownerAddress, resultArray.toString());
 
-                        res.redirect(req.path);
-                    });
-		});
+                            res.redirect(req.path);
+                        });
+                });
             } else {
                 res.redirect(req.path);
             }
