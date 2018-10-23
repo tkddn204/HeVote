@@ -3,10 +3,9 @@ const electionApi = require('../app/ethereum/api/election.api');
 const candidateApi = require('../app/ethereum/api/candidate.api');
 const contractInformation = require('../config/contract-address.json');
 const timeUtil = require('../app/utils/time.util');
-const waterfall = require('async/waterfall');
+const series = require('async/series');
 
 const fs = require('fs');
-const config = require('../config');
 const readLine = require('readline');
 const Hec = require('../app/hec/hec');
 const ipfsApi = require('../app/ipfs/ipfs.api');
@@ -68,7 +67,7 @@ const createHePublicKey = async (
         const fileSize = fs.statSync(publicKeyFilePath).size;
         if (fileSize > 0) {
             console.log("Success to create He's PublicKey!");
-            cb(null, publicKeyFilePath);
+            cb(null, true);
         } else {
             console.error("failed: file not Saved");
             cb(new Error("failed: file not Saved"), null);
@@ -98,7 +97,8 @@ const makeNewElection = async (params) => {
 
     // 공개키 만든 후 IPFS에 공개키 저장
     try {
-        await new Promise((resolve, reject) => waterfall([(cb) => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L, cb),
+        await new Promise((resolve, reject) => series([
+            (cb) => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L, cb),
                 async (cb) => {
                     try {
                         const result = await ipfsApi(electionAddress, params.electionOwner);

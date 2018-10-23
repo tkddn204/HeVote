@@ -4,6 +4,7 @@ const ElectionFactory = artifacts.require('./ElectionFactory.sol');
 const Election = artifacts.require('./Election.sol');
 const config = require('../../../config');
 const Hec = require("../../hec/hec");
+const ipfsApi = require("../../ipfs/ipfs.api");
 
 module.exports = (deployer, network, accounts) =>
     deployer.then(async () => {
@@ -67,14 +68,39 @@ module.exports = (deployer, network, accounts) =>
         // data 디렉토리 생성
         Hec.makeDataDirectory();
         // hec으로 공개키를 저장합니다.
-        await Hec.createKeys(deployedPublicElections[0], 257, 8, 'data', async () => {
-            const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";
-            const fileSize = fs.statSync(publicKeyFilePath).size;
-            if (fileSize > 0) {
-                console.log("good. Key files saved");
-            } else {
-                console.error("failed: file not Saved");
-            }
-        });
-        // 이후 ipfs.region.js 스크립트를 실행하면 됩니다.
+        try {
+            await new Promise((resolve, reject) => series([
+                    async (cb) => {
+                        await Hec.createKeys(deployedPublicElections[0], 257, 8, 'data', () => {
+                            const publicKeyFilePath = "./data/publicKey/" + deployedPublicElections[0] + ".bin";
+                            const fileSize = fs.statSync(publicKeyFilePath).size;
+                            if (fileSize > 0) {
+                                console.log("good. Key files saved");
+                                cb(null, true);
+                            } else {
+                                cb(new Error("failed: file not Saved"), false);
+                            }
+                        });
+                    },
+                    async (cb) => {
+                        try {
+                            const result = await ipfsApi(deployedPublicElections[0], accounts[1]);
+                            cb(null, result);
+                        } catch (e) {
+                            cb(e, false);
+                        }
+                    }],
+                (err, result) => {
+                    if (err) {
+                        console.log(`Fail to create 대전 지방선거...`);
+                        reject(err);
+                    } else {
+                        console.log(`Success to create 대전 지방선거!`);
+                        resolve(result);
+                    }
+                }
+            ));
+        } catch (e) {
+            console.error(e);
+        }
     });
