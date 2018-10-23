@@ -161,7 +161,7 @@ exports.changeState = async (req, res) => {
                 // 투표 집계
 
                 // 투표한 유권자들의 주소를 모두 읽는다
-                const votedVoterAddressList = voterApi.getVotedVoterList(electionAddress);
+                const votedVoterAddressList = await voterApi.getVotedVoterList(electionAddress);
 
                 // 선거 결과를 저장할 디렉토리를 만든다
                 const electionResultDirPath = path.resolve(`./data/result/${electionAddress.toLowerCase()}`);
