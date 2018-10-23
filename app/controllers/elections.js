@@ -171,17 +171,15 @@ exports.changeState = async (req, res) => {
                 let lock = 0;
 
                 // 병렬 실행을 위해 설정
-                let ipfsGetFuctions = [];
+                let ipfsGetFunctions = [];
                 for (let i = 0;i < votedVoterAddressList.length; i++) {
                     // 유권자 주소로 이더리움에 저장된 IPFS 해쉬값을 읽는다
                     const fileHash = await electionApi.getBallot(
                         electionAddress, votedVoterAddressList[i]);
-                    ipfsGetFuctions.push((cb) => ipfs.files.get(fileHash, cb));
+                    ipfsGetFunctions.push((cb) => ipfs.files.get(fileHash, cb));
                 }
 
-                await parallel([
-                    (cb) => ipfs.files.get(fileHash, cb)
-                ], async (err, files) => {
+                await parallel(ipfsGetFunctions, async (err, files) => {
                     if (err) {
                         console.log(err);
                     }
