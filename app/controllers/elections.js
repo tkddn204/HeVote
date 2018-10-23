@@ -174,7 +174,6 @@ exports.changeState = async (req, res) => {
                         console.log(err);
                     }
 
-                    console.log(files);
                     for (let i = 0; i < files.length; i++) {
                         fs.writeFileSync(`${electionResultDirPath}/${files[i][0].path}`,
                             files[i][0].content.toString('utf8'));
@@ -187,6 +186,9 @@ exports.changeState = async (req, res) => {
                             if (err) {
                                 return res.send(err);
                             }
+
+                            // 집계 확인용 출력
+                            console.debug(out);
 
                             // 집계 후의 폴더 삭제
                             rimraf.sync(electionResultDirPath);

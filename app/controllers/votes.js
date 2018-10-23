@@ -108,15 +108,6 @@ exports.postVote = async (req, res) => {
                 const candidateListPath = path.resolve(
                     `./data/candidate/${electionAddress}/${voterAddress}`);
 
-                // 이 유권자와 관련된 후보자 파일 삭제
-                rimraf.sync(candidateListPath);
-                const candidateLength = await candidateApi.getCandidateLength(electionAddress);
-                for(let i = 0; i < candidateLength; i++) {
-                    const candidateFile = path.resolve(
-                        `./data/candidate/${electionAddress.toLowerCase()}-${i}-${voterAddress}.txt`);
-                    fs.unlinkSync(candidateFile);
-                }
-
                 // DB 업데이트
                 const finiteElection = await electionApi.isFiniteElection(electionAddress);
                 Account.findOneAndUpdate({username: req.user.username}, {
@@ -125,11 +116,20 @@ exports.postVote = async (req, res) => {
                     if (err) res.send(err.toString());
                     else res.redirect(req.path.substring(0, req.path.length - 5));
                 });
+
+                // 이 유권자와 관련된 후보자 파일 삭제
+                rimraf.sync(candidateListPath);
+                const candidateLength = await candidateApi.getCandidateLength(electionAddress);
+                for(let i = 0; i < candidateLength; i++) {
+                    const candidateFile = path.resolve(
+                        `./data/candidate/${electionAddress.toLowerCase()}-${i}-${voterAddress.toLowerCase()}.txt`);
+                    fs.unlinkSync(candidateFile);
+                }
             } else {
                 res.send('투표 실패');
             }
         } else {
-            alert("이미 참여하신 투표입니다.");
+            res.redirect(req.path.substring(0, req.path.length - 5));
         }
     } catch (err) {
         res.send(err.toString());
