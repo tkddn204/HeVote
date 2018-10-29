@@ -9,10 +9,10 @@ const addPublicKeyOfHe = async (contractAddress, ownerAddress) => {
     const publicKeyFile = fs.readFileSync(publicKeyFilePath);
     let buffer = new Buffer.from(publicKeyFile);
 
+    console.log("add publicKey to IPFS.....");
     return new Promise((resolve, reject) => ipfs.files.add(buffer, async (err, res) => {
         if (err) {
-            reject(err);
-            return;
+            return reject(err);
         }
         const publicKeyFileHash = res[0].hash;
         console.log(`publicKey Hash : ${publicKeyFileHash}`);
