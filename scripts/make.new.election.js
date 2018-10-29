@@ -9,6 +9,8 @@ const fs = require('fs');
 const readLine = require('readline');
 const Hec = require('../app/hec/hec');
 const ipfsApi = require('../app/ipfs/ipfs.api');
+
+const mongoose = require('mongoose');
 const config = require('../config');
 const Account = require('../app/models/account');
 
