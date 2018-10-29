@@ -79,8 +79,8 @@ const createHePublicKey = async (
     });
 };
 
-function setDeployedElectionToUser(electionAddress, electionOwner, finiteElection) {
-    Account.update(
+const setDeployedElectionToUser = async (electionAddress, electionOwner, finiteElection) => {
+    await Account.update(
         {"etherAccount": electionOwner},
         {
             "$push": {
@@ -95,7 +95,7 @@ function setDeployedElectionToUser(electionAddress, electionOwner, finiteElectio
             console.log("Saved MongoDB!")
         }
     );
-}
+};
 
 const makeNewElection = async (params) => {
     // 새로운 선거 컨트렉트 생성
@@ -119,10 +119,6 @@ const makeNewElection = async (params) => {
     // 공개키 만든 후 IPFS에 공개키 저장
     try {
         await new Promise((resolve, reject) => series([
-                () => setDeployedElectionToUser(
-                    electionAddress,
-                    params.electionOwner,
-                    params.finiteElection),
                 () => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L),
                 async () => {
                     try {
@@ -130,7 +126,11 @@ const makeNewElection = async (params) => {
                     } catch (e) {
                         console.error(e);
                     }
-                }],
+                },
+                () => setDeployedElectionToUser(
+                    electionAddress,
+                    params.electionOwner,
+                    params.finiteElection)],
             (err, result) => {
                 if (err) {
                     console.log(`Fail to create ${params.electionName}...`);
