@@ -76,10 +76,9 @@ const createHePublicKey = async (
         const fileSize = fs.statSync(publicKeyFilePath).size;
         if (fileSize > 0) {
             console.log("Success to create He's PublicKey!");
-            cb(true)
+            cb(null, true);
         } else {
-            console.error("failed: file not Saved");
-            cb(false)
+            cb(new Error("failed: file not Saved"));
         }
     });
 };
@@ -110,44 +109,38 @@ const makeNewElection = async (params) => {
     );
     console.log("Add Candidates Success.");
     // 공개키 만든 후 IPFS에 공개키 저장
-    try {
-        await new Promise((resolve, reject) => series([
-                (cb) => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L, cb),
-                async (cb) => {
-                    try {
-                        await ipfsApi(electionAddress, params.electionOwner)
-                        cb(true)
-                    } catch (e) {
-                        console.error(e);
-                        cb(false)
-                    }
-                },
-                async (cb) => {
-                    try {
-                        await require('./mongo.account.update')(
-                            electionAddress,
-                            params.electionOwner,
-                            params.finiteElection);
-                        cb(true)
-                    } catch (e) {
-                        console.error(e);
-                        cb(false)
-                    }
-                }],
-            (err, result) => {
-                if (err) {
-                    console.log(`Fail to create ${params.electionName}...`);
-                    console.error(err);
-                    reject(err);
-                } else {
-                    console.log(`Success to create ${params.electionName}!`);
-                    resolve(result);
+    await new Promise((resolve, reject) => series([
+            (cb) => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L, cb),
+            async (cb) => {
+                try {
+                    await ipfsApi(electionAddress, params.electionOwner);
+                    cb(null, true)
+                } catch (e) {
+                    cb(e);
                 }
+            },
+            async (cb) => {
+                try {
+                    await require('./mongo.account.update')(
+                        electionAddress,
+                        params.electionOwner,
+                        params.finiteElection);
+                    cb(null, true)
+                } catch (e) {
+                    cb(e);
+                }
+            }],
+        (err, result) => {
+            if (err) {
+                console.log(`Fail to create ${params.electionName}...`);
+                console.error(err);
+                reject(err);
+            } else {
+                console.log(`Success to create ${params.electionName}!`);
+                resolve(result);
             }
-        ));
-    } catch (e) {
-        console.error(e);
-    }
+        }
+    ));
 };
 
 // Input Election's Information with ReadLine module.
