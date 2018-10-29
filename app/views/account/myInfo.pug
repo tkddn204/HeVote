@@ -26,8 +26,9 @@ block content
                         +voteItem(election)
 
             -createBtnText= isAdmin ? "선거 개설" : "선거 개설 신청"
+            -createBtnHref= isAdmin ? "/election/create" : "/election/request"
             a.btn.btn-primary.btn-lg(style='margin: 30px')(
-            href="/election/create"
+            href=createBtnHref
             role="button"
             aria-pressed="true"
             ) #{createBtnText}
