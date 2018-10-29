@@ -76,9 +76,13 @@ const createHePublicKey = async (
         const fileSize = fs.statSync(publicKeyFilePath).size;
         if (fileSize > 0) {
             console.log("Success to create He's PublicKey!");
-            cb(null, true);
+            if (typeof cb === 'function') {
+                cb(null, true)
+            }
         } else {
-            cb(new Error("failed: file not Saved"));
+            if (typeof cb === 'function') {
+                cb(new Error("failed: file not Saved"));
+            }
         }
     });
 };
@@ -113,14 +117,18 @@ const makeNewElection = async (params) => {
             (cb) => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L, cb),
             async (cb) => {
                 await ipfsApi(electionAddress, params.electionOwner);
-                cb(null, true)
+                if (typeof cb === 'function') {
+                    cb(null, true)
+                }
             },
             async (cb) => {
                 await require('./mongo.account.update')(
                     electionAddress,
                     params.electionOwner,
                     params.finiteElection);
-                cb(null, true)
+                if (typeof cb === 'function') {
+                    cb(null, true)
+                }
             }],
         (err, result) => {
             if (err) {
