@@ -10,6 +10,10 @@ const readLine = require('readline');
 const Hec = require('../app/hec/hec');
 const ipfsApi = require('../app/ipfs/ipfs.api');
 
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 const makeNewContract = async (
     electionName,
     electionDescription,
@@ -18,8 +22,9 @@ const makeNewContract = async (
     endDate,
     finiteElection) => {
 
-    const startDateTime = timeUtil.dateStringToTimestamp(startDate);
-    const endDateTime = timeUtil.dateStringToTimestamp(endDate);
+    let startDateTime = isNumeric(startDate) ? startDate: timeUtil.dateStringToTimestamp(startDate);
+    let endDateTime = isNumeric(endDate) ? endDate: timeUtil.dateStringToTimestamp(endDate);
+
     // 선거 생성
     await electionFactoryApi.makeNewElection(
         contractInformation['admin_address'],
