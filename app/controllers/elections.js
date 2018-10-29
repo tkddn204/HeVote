@@ -109,7 +109,7 @@ exports.detail = async (req, res) => {
             const result = await electionApi.getTallyResult(electionAddress);
             if (result) {
                 // 결과 String을 배열로 만듦
-                const resultArray = result.split(',').map((val) => parseInt(val));
+                const resultArray = result.split('/').map((val) => parseInt(val));
                 electionDetail.tallyResult = resultArray;
 
                 const max = Math.max.apply(null, resultArray);
@@ -195,7 +195,7 @@ exports.changeState = async (req, res) => {
 
                             // 이더리움에 결과 저장
                             const resultArray = Hec.getResult(electionAddress);
-                            await electionApi.setTallyResult(electionAddress, ownerAddress, resultArray.toString());
+                            await electionApi.setTallyResult(electionAddress, ownerAddress, resultArray.join("/"));
                             res.redirect(req.path);
                         });
                 });
