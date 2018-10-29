@@ -69,15 +69,17 @@ const addCandidates = async (
 const createHePublicKey = async (
     electionAddress,
     electionOwner,
-    p, L
+    p, L, cb
 ) => {
     await Hec.createKeys(electionAddress, p, L, 'data', () => {
         const publicKeyFilePath = "./data/publicKey/" + electionAddress + ".bin";
         const fileSize = fs.statSync(publicKeyFilePath).size;
         if (fileSize > 0) {
             console.log("Success to create He's PublicKey!");
+            cb(true)
         } else {
             console.error("failed: file not Saved");
+            cb(false)
         }
     });
 };
@@ -110,12 +112,28 @@ const makeNewElection = async (params) => {
     // 공개키 만든 후 IPFS에 공개키 저장
     try {
         await new Promise((resolve, reject) => series([
-                () => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L),
-                () => ipfsApi(electionAddress, params.electionOwner),
-                () => require('./mongo.account.update')(
-                    electionAddress,
-                    params.electionOwner,
-                    params.finiteElection)],
+                (cb) => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L, cb),
+                async (cb) => {
+                    try {
+                        ipfsApi(electionAddress, params.electionOwner)
+                        cb(true)
+                    } catch (e) {
+                        console.error(e);
+                        cb(false)
+                    }
+                },
+                async (cb) => {
+                    try {
+                        require('./mongo.account.update')(
+                            electionAddress,
+                            params.electionOwner,
+                            params.finiteElection);
+                        cb(true)
+                    } catch (e) {
+                        console.error(e);
+                        cb(false)
+                    }
+                }],
             (err, result) => {
                 if (err) {
                     console.log(`Fail to create ${params.electionName}...`);
