@@ -22,8 +22,8 @@ const makeNewContract = async (
     endDate,
     finiteElection) => {
 
-    let startDateTime = isNumeric(startDate) ? startDate: timeUtil.dateStringToTimestamp(startDate);
-    let endDateTime = isNumeric(endDate) ? endDate: timeUtil.dateStringToTimestamp(endDate);
+    let startDateTime = isNumeric(startDate) ? startDate : timeUtil.dateStringToTimestamp(startDate);
+    let endDateTime = isNumeric(endDate) ? endDate : timeUtil.dateStringToTimestamp(endDate);
 
     // 선거 생성
     await electionFactoryApi.makeNewElection(
@@ -65,20 +65,36 @@ const addCandidates = async (
 const createHePublicKey = async (
     electionAddress,
     electionOwner,
-    p, L, cb
+    p, L
 ) => {
     await Hec.createKeys(electionAddress, p, L, 'data', () => {
         const publicKeyFilePath = "./data/publicKey/" + electionAddress + ".bin";
         const fileSize = fs.statSync(publicKeyFilePath).size;
         if (fileSize > 0) {
             console.log("Success to create He's PublicKey!");
-            cb(null, true);
         } else {
             console.error("failed: file not Saved");
-            cb(new Error("failed: file not Saved"), null);
         }
     });
 };
+
+function setDeployedElectionToUser(electionOwner, electionAddress, finiteElection) {
+    Account.update(
+        {"etherAccount": electionOwner},
+        {
+            "$push": {
+                "deployedElections": {
+                    address: electionAddress,
+                    finite: finiteElection
+                }
+            }
+        },
+        (err) => {
+            if (err) return err;
+            console.log("Saved MongoDB!")
+        }
+    );
+}
 
 const makeNewElection = async (params) => {
     // 새로운 선거 컨트렉트 생성
@@ -99,17 +115,19 @@ const makeNewElection = async (params) => {
         params.candidateCommitmentList
     );
     console.log("Add Candidates Success.");
-
     // 공개키 만든 후 IPFS에 공개키 저장
     try {
         await new Promise((resolve, reject) => series([
-            (cb) => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L, cb),
-                async (cb) => {
+                () => setDeployedElectionToUser(
+                    params.electionOwner,
+                    electionAddress,
+                    params.finiteElection),
+                () => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L),
+                async () => {
                     try {
-                        const result = await ipfsApi(electionAddress, params.electionOwner);
-                        cb(null, result);
+                        await ipfsApi(electionAddress, params.electionOwner);
                     } catch (e) {
-                        cb(e, false);
+                        console.error(e);
                     }
                 }],
             (err, result) => {
