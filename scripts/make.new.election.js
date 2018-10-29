@@ -83,26 +83,32 @@ const createHePublicKey = async (
 };
 
 const setDeployedElectionToUser = async (electionAddress, electionOwner, finiteElection) => {
-    mongoose.connect(config.db, {useNewUrlParser: true})
-        .then(() => console.log("mongoDB connected."))
-        .catch(err => console.error(err.message));
+    return new Promise((resolve, reject) => {
+        mongoose.connect(config.db, {useNewUrlParser: true})
+            .then(() => console.log("mongoDB connected."))
+            .catch(err => {
+                console.error(err.message);
+                reject(err);
+            });
 
-    await Account.update(
-        {"etherAccount": electionOwner},
-        {
-            "$push": {
-                "deployedElections": {
-                    address: electionAddress,
-                    finite: finiteElection
+        Account.update(
+            {"etherAccount": electionOwner},
+            {
+                "$push": {
+                    "deployedElections": {
+                        address: electionAddress,
+                        finite: finiteElection
+                    }
                 }
+            },
+            (err) => {
+                if (err) return reject(err);
+                else console.log("Saved MongoDB!");
+                mongoose.connection.close();
+                resolve();
             }
-        },
-        (err) => {
-            if (err) return err;
-            else console.log("Saved MongoDB!");
-            mongoose.connection.close();
-        }
-    );
+        );
+    })
 };
 
 const makeNewElection = async (params) => {
@@ -135,10 +141,17 @@ const makeNewElection = async (params) => {
                         console.error(e);
                     }
                 },
-                () => setDeployedElectionToUser(
-                    electionAddress,
-                    params.electionOwner,
-                    params.finiteElection)],
+                async () => {
+                    try {
+                        await setDeployedElectionToUser(
+                            electionAddress,
+                            params.electionOwner,
+                            params.finiteElection);
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+            ],
             (err, result) => {
                 if (err) {
                     console.log(`Fail to create ${params.electionName}...`);
@@ -148,7 +161,8 @@ const makeNewElection = async (params) => {
                     resolve(result);
                 }
             }
-        ));
+        ))
+        ;
     } catch (e) {
         console.error(e);
     }
