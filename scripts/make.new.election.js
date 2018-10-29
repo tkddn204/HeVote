@@ -117,24 +117,22 @@ const makeNewElection = async (params) => {
                     } catch (e) {
                         console.error(e);
                     }
-                },
-                async () =>
-                    await require('../scripts/mongo.account.update')(
-                        electionAddress,
-                        params.electionOwner,
-                        params.finiteElection)
-            ],
+                }],
             (err, result) => {
                 if (err) {
                     console.log(`Fail to create ${params.electionName}...`);
                     reject(err);
                 } else {
                     console.log(`Success to create ${params.electionName}!`);
+
+                    require('./mongo.account.update')(
+                        electionAddress,
+                        params.electionOwner,
+                        params.finiteElection);
                     resolve(result);
                 }
             }
-        ))
-        ;
+        ));
     } catch (e) {
         console.error(e);
     }
