@@ -9,6 +9,7 @@ const fs = require('fs');
 const readLine = require('readline');
 const Hec = require('../app/hec/hec');
 const ipfsApi = require('../app/ipfs/ipfs.api');
+const Account = require('../app/models/account');
 
 function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
@@ -78,7 +79,7 @@ const createHePublicKey = async (
     });
 };
 
-function setDeployedElectionToUser(electionOwner, electionAddress, finiteElection) {
+function setDeployedElectionToUser(electionAddress, electionOwner, finiteElection) {
     Account.update(
         {"etherAccount": electionOwner},
         {
@@ -119,8 +120,8 @@ const makeNewElection = async (params) => {
     try {
         await new Promise((resolve, reject) => series([
                 () => setDeployedElectionToUser(
-                    params.electionOwner,
                     electionAddress,
+                    params.electionOwner,
                     params.finiteElection),
                 () => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L),
                 async () => {
