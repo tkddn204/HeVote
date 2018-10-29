@@ -10,10 +10,6 @@ const readLine = require('readline');
 const Hec = require('../app/hec/hec');
 const ipfsApi = require('../app/ipfs/ipfs.api');
 
-const mongoose = require('mongoose');
-const config = require('../config');
-const Account = require('../app/models/account');
-
 function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
@@ -41,7 +37,7 @@ const makeNewContract = async (
     );
 
     const deployedElections = await electionFactoryApi.getDeployedElections(finiteElection);
-    const electionAddress = deployedElections[deployedElections.length - 1];
+    const electionAddress = deployedElections[deployedElections.length - 1].toLowerCase();
 
     // 현재 날짜가 시작 날짜와 종료 날짜 사이에 있으면 상태를 진행 중으로 변경
     const currentDateTime = new Date() / 1000;

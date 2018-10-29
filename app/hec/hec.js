@@ -39,7 +39,7 @@ class Hec {
      * @param {function} cb exec 처리가 끝난 후의 콜백 함수
      */
     static async createKeys(o, p = 13, L = 3, dir, cb) {
-        const command = `${config.root}/app/hec/bin/createKeys o=${o} p=${p} L=${L} dir=${dir}`;
+        const command = `${config.root}/app/hec/bin/createKeys o=${o.toLowerCase()} p=${p} L=${L} dir=${dir}`;
         console.debug(command);
 
         let out, err;
