@@ -62,7 +62,7 @@ module.exports = (deployer, network, accounts) =>
             fs.writeFile(`${config.root}/config/contract-address.json`,
                 new Buffer.from(JSON.stringify(jsonObj)), 'utf8', (err) => {
                     if (err) throw 'error writing file: ' + err;
-                    require('../../../scripts/mongo.account.update')(jsonObj);
+                    require('../../../scripts/mongo.account.create')(jsonObj);
                     fs.close(fd, () => console.log(JSON.stringify(jsonObj)));
                 });
         });

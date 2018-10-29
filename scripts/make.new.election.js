@@ -84,31 +84,7 @@ const createHePublicKey = async (
 
 const setDeployedElectionToUser = async (electionAddress, electionOwner, finiteElection) => {
     return new Promise((resolve, reject) => {
-        mongoose.connect(config.db, {useNewUrlParser: true})
-            .then(() => {
-                console.log("mongoDB connected.");
-                Account.update(
-                    {"etherAccount": electionOwner},
-                    {
-                        "$push": {
-                            "deployedElections": {
-                                address: electionAddress,
-                                finite: finiteElection
-                            }
-                        }
-                    },
-                    (err) => {
-                        if (err) return reject(err);
-                        else console.log("Saved MongoDB!");
-                        mongoose.connection.close();
-                        resolve();
-                    }
-                );
-            })
-            .catch(err => {
-                console.error(err.message);
-                reject(err);
-            });
+
     });
 };
 
@@ -142,16 +118,11 @@ const makeNewElection = async (params) => {
                         console.error(e);
                     }
                 },
-                async () => {
-                    try {
-                        await setDeployedElectionToUser(
-                            electionAddress,
-                            params.electionOwner,
-                            params.finiteElection);
-                    } catch (e) {
-                        console.error(e);
-                    }
-                }
+                async () =>
+                    await require('../scripts/mongo.account.update')(
+                        electionAddress,
+                        params.electionOwner,
+                        params.finiteElection)
             ],
             (err, result) => {
                 if (err) {
