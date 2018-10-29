@@ -10,7 +10,7 @@ const makeNewAccount = async (password) => {
         value: web3.utils.toWei('0.1', 'ether'),
         gasLimit: 21000
     });
-    return account
+    return account.toLowerCase()
 };
 
 module.exports = {
