@@ -9,6 +9,7 @@ const fs = require('fs');
 const readLine = require('readline');
 const Hec = require('../app/hec/hec');
 const ipfsApi = require('../app/ipfs/ipfs.api');
+const config = require('../config');
 const Account = require('../app/models/account');
 
 function isNumeric(n) {
@@ -80,6 +81,10 @@ const createHePublicKey = async (
 };
 
 const setDeployedElectionToUser = async (electionAddress, electionOwner, finiteElection) => {
+    mongoose.connect(config.db, {useNewUrlParser: true})
+        .then(() => console.log("mongoDB connected."))
+        .catch(err => console.error(err.message));
+
     await Account.update(
         {"etherAccount": electionOwner},
         {
@@ -92,7 +97,8 @@ const setDeployedElectionToUser = async (electionAddress, electionOwner, finiteE
         },
         (err) => {
             if (err) return err;
-            console.log("Saved MongoDB!")
+            else console.log("Saved MongoDB!");
+            mongoose.connection.close();
         }
     );
 };
