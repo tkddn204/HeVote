@@ -4,8 +4,8 @@ const Account = require('../app/models/account');
 const config = require('../config');
 
 
-const mongoAccountUpdate = (electionowner, electionAddress, finiteElection) => {
-    mongoose.connect(config.db, {useNewUrlParser: true})
+const mongoAccountUpdate = (electionOwner, electionAddress, finiteElection) =>
+    new Promise((resolve, reject) => mongoose.connect(config.db, {useNewUrlParser: true})
         .then(() => {
             console.log("mongoDB connected.");
             Account.update(
@@ -29,7 +29,7 @@ const mongoAccountUpdate = (electionowner, electionAddress, finiteElection) => {
         .catch(err => {
             console.error(err.message);
             reject(err);
-        });
-};
+        })
+);
 
 module.exports = mongoAccountUpdate;
