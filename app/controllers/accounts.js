@@ -26,7 +26,7 @@ exports.create = async (req, res, next) => {
     Account.register(new Account(
         {
             username: username,
-            etherAccount: ethAccount
+            etherAccount: ethAccount.toLowerCase()
         }), password, (err, account) => {
         if (err) {
             return res.render('account/register', {error: err.message});
