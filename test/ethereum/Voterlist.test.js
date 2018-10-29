@@ -11,7 +11,8 @@ contract('Voterlist + Voting', accounts => {
     });
 
     it('현재 투표자들은 0명', async () => {
-        const numVoters = await privateVoteInstance.getNumVoters();
+        const numVoters = await privateVoteInstance.getVotedVoterList();
+        console.log(numVoters);
         assert.equal(parseInt(numVoters, 10), 0, "투표자가 0명이 아님");
     });
 

@@ -39,7 +39,7 @@ exports.electionRequestUser = (req, res) => {
     const data = req.body;
 
     // 데이터 가공
-    data.finiteElection = data.finiteElection === 'true';
+    data.finiteElection = data.finiteElection !== 'true';
     data.startDate = dateStringToTimestamp(data.startDate);
     data.endDate = dateStringToTimestamp(data.endDate);
 
