@@ -87,12 +87,6 @@ const createHePublicKey = async (
     });
 };
 
-const setDeployedElectionToUser = async (electionAddress, electionOwner, finiteElection) => {
-    return new Promise((resolve, reject) => {
-
-    });
-};
-
 const makeNewElection = async (params) => {
     // 새로운 선거 컨트렉트 생성
     const electionAddress = await makeNewContract(
@@ -123,8 +117,8 @@ const makeNewElection = async (params) => {
             },
             async (cb) => {
                 await require('./mongo.account.update')(
-                    electionAddress,
                     params.electionOwner,
+                    electionAddress,
                     params.finiteElection);
                 if (typeof cb === 'function') {
                     cb(null, true)
