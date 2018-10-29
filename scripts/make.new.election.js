@@ -112,23 +112,15 @@ const makeNewElection = async (params) => {
     await new Promise((resolve, reject) => series([
             (cb) => createHePublicKey(electionAddress, params.electionOwner, params.p, params.L, cb),
             async (cb) => {
-                try {
-                    await ipfsApi(electionAddress, params.electionOwner);
-                    cb(null, true)
-                } catch (e) {
-                    cb(e);
-                }
+                await ipfsApi(electionAddress, params.electionOwner);
+                cb(null, true)
             },
             async (cb) => {
-                try {
-                    await require('./mongo.account.update')(
-                        electionAddress,
-                        params.electionOwner,
-                        params.finiteElection);
-                    cb(null, true)
-                } catch (e) {
-                    cb(e);
-                }
+                await require('./mongo.account.update')(
+                    electionAddress,
+                    params.electionOwner,
+                    params.finiteElection);
+                cb(null, true)
             }],
         (err, result) => {
             if (err) {
