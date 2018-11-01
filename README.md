@@ -1,6 +1,6 @@
 # HeVote
 
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/HanBae/HeVote/blob/master/LICENSE)
+[![HeVote license:Apache License 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/HanBae/HeVote/blob/master/LICENSE)
 
 HeVote는 동형암호를 사용한 이더리움 기반 전자투표 시스템(ÐApp)입니다.
 
@@ -79,5 +79,5 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 
 ## License
 
-HeVote는 [MIT License](https://github.com/HanBae/HeVote/blob/master/LICENSE) 하에 관리됩니다.
+HeVote는 2018/11/1부터 [Apache License 2.0](https://github.com/HanBae/HeVote/blob/master/LICENSE) 하에 관리됩니다.
 - HElib: [Apache License 2.0](https://github.com/shaih/HElib/blob/master/LICENSE)
