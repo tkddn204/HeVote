@@ -62,6 +62,7 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 [![HeVote 시연영상](https://github.com/HanBae/HeVote/blob/master/docs/images/youtube-thumbnail.jpg)](https://youtu.be/JJoauvoU-QI)
 
 클릭하면 Youtube 시연영상으로 이동합니다.
+- [실제 구동 영상](https://www.youtube.com/watch?v=NRCjDZWb8JM)
 
 ## TODO
 
