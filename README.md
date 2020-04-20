@@ -1,5 +1,9 @@
 # HeVote
 
+## Deprecated
+
+이 프로젝트는 개발자 사정으로 인하여 더이상 관리되지 않습니다. 관심을 가져주신 모든 분들께 사과의 말씀을 전합니다. 죄송합니다.
+
 [![HeVote license:Apache License 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/HanBae/HeVote/blob/master/LICENSE)
 
 HeVote는 동형암호를 사용한 이더리움 기반 전자투표 시스템(ÐApp)입니다.
