@@ -1,5 +1,9 @@
 # HeVote
 
+## Deprecated
+
+이 프로젝트는 개발자 사정으로 인하여 더이상 관리되지 않습니다. 관심을 가져주신 모든 분들께 사과의 말씀을 전합니다. 죄송합니다.
+
 [![HeVote license:Apache License 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/HanBae/HeVote/blob/master/LICENSE)
 
 HeVote는 동형암호를 사용한 이더리움 기반 전자투표 시스템(ÐApp)입니다.
@@ -62,6 +66,7 @@ Express.js + mongoDB를 사용한 정적 웹으로 사용자에게 쉽고 편리
 [![HeVote 시연영상](https://github.com/HanBae/HeVote/blob/master/docs/images/youtube-thumbnail.jpg)](https://youtu.be/JJoauvoU-QI)
 
 클릭하면 Youtube 시연영상으로 이동합니다.
+- [실제 구동 영상](https://www.youtube.com/watch?v=NRCjDZWb8JM)
 
 ## TODO
 
